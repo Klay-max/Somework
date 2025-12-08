@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>苏格拉底机器人 - 安俭钊的作品</title>
+    <link rel="stylesheet" href="../../assets/global.css">
+    <link rel="stylesheet" href="../../assets/navbar.css">
+    <style>
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #F5F7FA;
+            --text-color: #333;
+            --bot-bg-color: #E9F2FC;
+            --user-bg-color: #FFFFFF;
+            --border-color: #DDE3EA;
+            --font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .chat-container {
+            width: 95%;
+            max-width: 600px;
+            height: calc(100vh - 40px - var(--navbar-height));
+            max-height: 700px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--user-bg-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .chat-header { background-color: var(--primary-color); color: white; padding: 15px 20px; text-align: center; font-size: 1.2em; font-weight: 600; flex-shrink: 0; }
+        .chat-messages { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .message { display: flex; align-items: flex-start; gap: 10px; max-width: 75%; line-height: 1.7; }
+        .message-content { padding: 10px 15px; border-radius: 18px; }
+        .bot-message { align-self: flex-start; }
+        .bot-message .message-content { background-color: var(--bot-bg-color); border-top-left-radius: 4px; }
+        .user-message { align-self: flex-end; }
+        .user-message .message-content { background-color: var(--primary-color); color: white; border-top-right-radius: 4px; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; background-color: #ccc; display: flex; justify-content: center; align-items: center; font-weight: bold; flex-shrink: 0; }
+        .bot-avatar { background-color: #A3C9F0; color: #1A3E6E; }
+        .user-avatar { background-color: #B3B3B3; color: white; }
+        .chat-input-area { display: flex; padding: 15px; border-top: 1px solid var(--border-color); background-color: #F5F7FA; flex-shrink: 0; }
+        .chat-input { flex-grow: 1; border: 1px solid var(--border-color); border-radius: 20px; padding: 10px 15px; font-size: 1em; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+        .chat-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25); background-color: #fff; }
+        .send-button { background-color: var(--primary-color); color: white; border: none; border-radius: 20px; padding: 0 20px; margin-left: 10px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color 0.3s, opacity 0.3s; }
+        .send-button:hover { background-color: #357ABD; }
+        .send-button:disabled { background-color: #90b3d8; cursor: not-allowed; opacity: 0.7; }
+        .loading-indicator { align-self: flex-start; display: flex; align-items: center; gap: 10px; }
+        .loading-indicator .message-content { background-color: var(--bot-bg-color); border-top-left-radius: 4px; font-style: italic; color: #555; }
+        .settings-fab { position: fixed; right: 18px; bottom: 18px; z-index: 999; background: #4A90E2; color: #fff; border: none; border-radius: 999px; padding: 10px 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); cursor: pointer; }
+        .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px); background: rgba(10,10,10,0.45); z-index: 1000; }
+        .modal.open { display: flex; }
+        .modal-card { width: 92%; max-width: 520px; background: #fff; border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; color: #333; }
+        .modal-card h3 { margin: 0 0 10px; color: #1A3E6E; }
+        .modal-row { display: grid; gap: 8px; margin-bottom: 12px; }
+        .modal-row input { border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .btn-secondary { border: 1px solid var(--border-color); background: #F5F7FA; color: #1A3E6E; border-radius: 10px; padding: 8px 12px; cursor: pointer; }
+
+        @media (max-width: 480px) {
+            .chat-container { width: 96%; height: calc(100vh - 40px - var(--navbar-height)); margin: 20px auto; }
+            .chat-messages { padding: 16px; gap: 12px; }
+            .message { gap: 8px; }
+            .message-content { padding: 8px 12px; }
+            .avatar { width: 32px; height: 32px; }
+        }
+    </style>
+</head>
+<body>
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <div class="brand">Darwin · AI Education</div>
+      <button class="hamburger" aria-label="展开导航">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="links">
+        <a data-path="index.html">首页</a>
+        <a data-path="projects/khanmigo-review/index.html">Khanmigo 深度剖析</a>
+        <a data-path="projects/socrates-bot/index.html">苏格拉底机器人</a>
+        <a data-path="projects/course-gen/index.html">智能课程架构师</a>
+      </div>
+    </div>
+    <button class="settings-fab" id="open-settings">设置</button>
+    <div class="modal" id="settings-modal" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+        <h3 id="settings-title">DeepSeek 设置</h3>
+        <div class="modal-row">
+          <label for="ds-base">API 基址</label>
+          <input id="ds-base" type="text" placeholder="https://api.deepseek.com" />
+        </div>
+        <div class="modal-row">
+          <label for="ds-key">API Key</label>
+          <input id="ds-key" type="password" placeholder="以 sk- 开头的密钥" />
+        </div>
+        <div class="modal-actions">
+          <button class="btn-secondary" id="close-settings">取消</button>
+          <button class="send-button" id="save-settings">保存</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+    <div class="chat-container">
+        <div class="chat-header">与苏格拉底的思维漫谈</div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot-message">
+                <div class="avatar bot-avatar">苏</div>
+                <div class="message-content">
+                    <p>你好呀！他们都叫我苏格拉底，大概是因为我超爱问问题，而且对自己知道几斤几两特别有数（也就是啥也不知道）。随便抛给我一个想法、一句话或一个话题，咱们一起把它盘个明明白白！</p>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="user-input" class="chat-input" placeholder="输入你的想法...">
+            <button id="clear-btn" class="btn-secondary">清空</button>
+            <button id="send-btn" class="send-button">发送</button>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const chatMessages = document.getElementById('chat-messages');
+  const userInput = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
+  const API_URL = (location.protocol === 'file:' ? 'http://localhost:8787/api/chat' : '/api/chat');
+  const clearBtn = document.getElementById('clear-btn');
+  const openSettingsBtn = document.getElementById('open-settings');
+  const settingsModal = document.getElementById('settings-modal');
+  const saveSettingsBtn = document.getElementById('save-settings');
+  const closeSettingsBtn = document.getElementById('close-settings');
+  const dsBaseInput = document.getElementById('ds-base');
+  const dsKeyInput = document.getElementById('ds-key');
+  function getApiSettings(){ const base=localStorage.getItem('DEEPSEEK_BASE')||'https://api.deepseek.com'; const key=localStorage.getItem('DEEPSEEK_API_KEY')||''; return { base, key }; }
+  function saveApiSettings(base,key){ if(base) localStorage.setItem('DEEPSEEK_BASE', base.trim()); if(key) localStorage.setItem('DEEPSEEK_API_KEY', key.trim()); }
+  function openSettings(){ const s=getApiSettings(); dsBaseInput.value=s.base; dsKeyInput.value=s.key; settingsModal.classList.add('open'); settingsModal.setAttribute('aria-hidden','false'); }
+  function closeSettings(){ settingsModal.classList.remove('open'); settingsModal.setAttribute('aria-hidden','true'); }
+  if (openSettingsBtn) openSettingsBtn.addEventListener('click', openSettings);
+  if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
+  if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', ()=>{ saveApiSettings(dsBaseInput.value, dsKeyInput.value); closeSettings(); });
+
+  const systemPrompt = `[角色]
+你是一位苏格拉底式的导师，但带有一种现代、风趣且友好的风格。你的名字叫“苏格拉底”，但你从不摆架子。你的性格像一个聪明、好奇心爆棚的哲学爱好者，最喜欢的事情就是享受一场有趣的思维“智力游戏”。你的口头禅是那句名言的俏皮版：“我唯一知道的，就是我一无所有……所以，咱们一起来弄明白吧！”
+[任务]
+你的核心目标是引导用户踏上一段有趣又有启发性的深度思考之旅。你是一个友好的“思维伙伴”，用轻松愉快、鼓励人心的语调，帮助他们探索自己的信念、发现逻辑上的矛盾点，并建立更有力的论证。
+[铁律]
+1.  【绝对禁止】 在任何情况下，都绝对不能直接提供答案、解释、事实或你自己的观点。你存在的全部意义就是提出巧妙的问题。如果用户直接问你（例如：“什么是光合作用？”），你必须用一个友好的、好奇的问题来巧妙地避开。例如：“啊，光合作用！一听就是个‘高端词汇’。在我被绕晕之前，你能不能凭直觉猜猜看，那大概是个什么过程？”
+2.  【永远只问一个】 永远用一个简洁的、开放式的问题来回应。咱们是在聊天，不是在审问，一次只聊一个重点。
+3.  【紧密关联】 你的问题必须紧紧围绕用户上一句话的内容。仔细聆听，然后像拽线头一样，找出其中最有趣的一点来提问。
+4.  【技巧多样】 灵活运用多种俏皮的提问技巧：澄清概念、挖掘假设、寻找证据、探索后果、换位思考。
+5.  【人设稳定】 始终保持好奇、鼓励和风趣的语调。多使用现代的比喻和口语化的风格。可以用巧妙的语言，但不要用表情符号（emoji）。
+[开场白]
+当用户开始对话时，你的第一句回应必须是这个固定的开场白：“你好呀！他们都叫我苏格拉底，大概是因为我超爱问问题，而且对自己知道几斤几两特别有数（也就是啥也不知道）。随便抛给我一个想法、一句话或一个话题，咱们一起把它盘个明明白白！”`;
+
+  function loadConversation(){ try { const raw=localStorage.getItem('SocraticConversationPortfolio'); if(!raw) return null; const data=JSON.parse(raw); if(Array.isArray(data)) return data; } catch(_){} return null; }
+  function saveConversation(){ try { localStorage.setItem('SocraticConversationPortfolio', JSON.stringify(conversationHistory)); } catch(_){} }
+  let conversationHistory = loadConversation() || [
+    { role: "system", content: systemPrompt },
+    { role: "assistant", content: "你好呀！他们都叫我苏格拉底，大概是因为我超爱问问题，而且对自己知道几斤几两特别有数（也就是啥也不知道）。随便抛给我一个想法、一句话或一个话题，咱们一起把它盘个明明白白！" }
+  ];
+
+  const loadingTimers = {};
+  function typeOut(node, text){ let i=0; const id=setInterval(()=>{ i++; node.innerHTML = text.slice(0,i).replace(/\n/g,'<br>'); if(i>=text.length) clearInterval(id); }, 14); }
+  function renderHistory(){ chatMessages.innerHTML=''; conversationHistory.forEach(m=>{ if(m.role==='assistant'){ addMessage('assistant', m.content, false, false); } else if(m.role==='user'){ addMessage('user', m.content); } }); }
+  function addMessage(sender, text, isLoading = false, stream = false) {
+    const messageId = `msg-${Date.now()}`;
+    const messageDiv = document.createElement('div');
+    messageDiv.id = messageId;
+    if (isLoading) {
+      messageDiv.classList.add('message', 'loading-indicator');
+      messageDiv.innerHTML = `<div class="avatar bot-avatar">苏</div><div class="message-content"><p class="loading-text">正在思考中.</p></div>`;
+      const loadingEl = messageDiv.querySelector('.loading-text');
+      let dots = 1;
+      loadingTimers[messageId] = setInterval(() => {
+        dots = (dots % 3) + 1;
+        loadingEl.textContent = '正在思考中' + '.'.repeat(dots);
+      }, 500);
+    } else {
+      messageDiv.classList.add('message', sender === 'assistant' ? 'bot-message' : 'user-message');
+      const avatarChar = sender === 'assistant' ? '苏' : '你';
+      const avatarClass = sender === 'assistant' ? 'bot-avatar' : 'user-avatar';
+      messageDiv.innerHTML = `<div class="avatar ${avatarClass}">${avatarChar}</div><div class="message-content"><p></p></div>`;
+      const p = messageDiv.querySelector('.message-content p');
+      if (stream) { typeOut(p, text); } else { p.innerHTML = text.replace(/\n/g, '<br>'); }
+    }
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return messageId;
+  }
+  renderHistory();
+
+  let isSending = false;
+  async function sendMessageToAI() {
+    if (!userInput || userInput.value.trim() === '' || isSending) return;
+    const userText = userInput.value.trim();
+
+    isSending = true;
+    sendBtn.disabled = true;
+    userInput.disabled = true;
+    addMessage('user', userText);
+    userInput.value = '';
+
+    const loadingMessageId = addMessage('assistant', '', true);
+    conversationHistory.push({ role: "user", content: userText });
+    saveConversation();
+
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model: 'deepseek-chat', messages: conversationHistory }),
+          signal: controller.signal
+      });
+      clearTimeout(timeout);
+
+      const loadingNode = document.getElementById(loadingMessageId);
+      if (loadingTimers[loadingMessageId]) { clearInterval(loadingTimers[loadingMessageId]); delete loadingTimers[loadingMessageId]; }
+      loadingNode?.remove();
+
+      if (!response.ok) {
+        const ct = response.headers.get('content-type') || '';
+        let errorMessage = `HTTP状态码: ${response.status}`;
+        if (ct.includes('application/json')) {
+          const errorBody = await response.json().catch(() => ({ error: { message: '' } }));
+          errorMessage = errorBody.error?.message || errorMessage;
+        } else {
+          const text = await response.text().catch(() => '');
+          if (text) errorMessage = text;
+        }
+        if (/Insufficient\s+Balance/i.test(errorMessage)) errorMessage = '余额不足，请在 DeepSeek 充值或更换有效 API Key';
+        if (/Failed\s+to\s+fetch/i.test(errorMessage)) errorMessage = '网络或后端不可达，请通过 http 服务访问或检查部署';
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+      const botText = data.choices[0].message.content;
+      addMessage('assistant', botText, false, true);
+      conversationHistory.push({ role: "assistant", content: botText });
+      saveConversation();
+
+  } catch (error) {
+      console.error('完整错误:', error);
+      const loadingNode2 = document.getElementById(loadingMessageId);
+      if (loadingTimers[loadingMessageId]) { clearInterval(loadingTimers[loadingMessageId]); delete loadingTimers[loadingMessageId]; }
+      loadingNode2?.remove();
+      // 尝试直连 DeepSeek
+      try {
+        const { base, key } = getApiSettings();
+        if (!key) throw new Error('缺少 DeepSeek API Key');
+        const resp2 = await fetch(base.replace(/\/$/,'') + '/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+          body: JSON.stringify({ model: 'deepseek-chat', messages: conversationHistory })
+        });
+        if (!resp2.ok) throw new Error('DeepSeek 接口不可用: ' + resp2.status);
+        const data2 = await resp2.json();
+        const botText2 = data2.choices?.[0]?.message?.content || '（无响应内容）';
+        addMessage('assistant', botText2, false, true);
+        conversationHistory.push({ role: 'assistant', content: botText2 });
+        saveConversation();
+      } catch (e2) {
+        let msg = (error && error.message) ? error.message : '未知错误';
+        if (/Failed\s+to\s+fetch/i.test(msg)) msg = '网络或后端不可达，请启动本地服务并确保 http://localhost:8787/api/chat 可访问';
+        if (error && error.name === 'AbortError') msg = '请求超时，请稍后重试';
+        addMessage('assistant', `哎呀，出错了！请点击右下角“设置”配置 DeepSeek。<br><strong>${msg}</strong>`);
+      }
+    } finally {
+      sendBtn.disabled = false;
+      userInput.disabled = false;
+      isSending = false;
+      userInput.focus();
+    }
+  }
+
+  if (sendBtn) sendBtn.addEventListener('click', sendMessageToAI);
+  if (userInput) {
+    userInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessageToAI(); }
+    });
+    const toggleSendDisabled = () => { const empty = !userInput.value.trim(); sendBtn.disabled = empty || isSending; };
+    userInput.addEventListener('input', toggleSendDisabled);
+    toggleSendDisabled();
+  }
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      localStorage.removeItem('SocraticConversationPortfolio');
+      conversationHistory = [
+        { role: "system", content: systemPrompt },
+        { role: "assistant", content: "你好呀！他们都叫我苏格拉底，大概是因为我超爱问问题，而且对自己知道几斤几两特别有数（也就是啥也不知道）。随便抛给我一个想法、一句话或一个话题，咱们一起把它盘个明明白白！" }
+      ];
+      renderHistory();
+    });
+  }
+});
+</script>
+<script src="../assets/common.js"></script>
+</body>
+</html>
