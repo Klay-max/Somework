@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能课程架构师 - 安俭钊的作品</title>
+    <link rel="stylesheet" href="../assets/global.css">
+    <link rel="stylesheet" href="../assets/navbar.css">
+    <style>
+        :root { --primary-color: #0EA5E9; --primary-dark: #0284C7; --secondary-color: #F1F5F9; --background-color: #F8FAFC; --text-color: #0F172A; --heading-color: #0B1220; --white-color: #ffffff; --border-color: #E2E8F0; --shadow: 0 10px 30px rgba(2, 6, 23, 0.08); --ring: 0 10px 30px rgba(14, 165, 233, 0.18); --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif; }
+
+        body { font-family: var(--font-family); background-color: var(--background-color); margin: 0; padding: 40px 20px; color: var(--text-color); line-height: 1.65; }
+    
+        .container { max-width: 960px; margin: 0 auto; }
+    
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+    
+        .header h1 { color: var(--heading-color); font-size: 2.6em; margin-bottom: 12px; letter-spacing: -0.02em; }
+    
+        .header p { font-size: 1.1em; color: #64748B; max-width: 680px; margin: 0 auto; }
+    
+        .input-section { display: flex; gap: 12px; margin-bottom: 34px; background: var(--white-color); padding: 22px; border-radius: 16px; box-shadow: var(--shadow); }
+    
+        #course-topic-input { flex-grow: 1; border: 2px solid var(--border-color); border-radius: 12px; padding: 14px 16px; font-size: 1.05em; transition: border-color 0.3s, box-shadow 0.3s; }
+        #course-topic-input:hover {
+            border-color: #cbd5e0;
+        }
+        
+        #course-topic-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.25); }
+    
+        #generate-btn { border: none; background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: var(--white-color); padding: 0 30px; font-size: 1.05em; font-weight: 600; border-radius: 12px; cursor: pointer; transition: transform 0.2s; box-shadow: var(--ring); }
+    
+        #generate-btn:hover { transform: translateY(-1px); }
+        
+        #generate-btn:active {
+            transform: scale(0.98);
+        }
+        
+        #generate-btn:disabled { background-color: #93C5FD; cursor: not-allowed; opacity: 0.85; box-shadow: none; }
+    
+        #loader {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.1em;
+            color: #718096;
+        }
+        .loading-wrap { display: inline-flex; align-items: center; gap: 12px; }
+        .spinner { width: 24px; height: 24px; border: 3px solid #cbd5e0; border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .dots { display: inline-flex; gap: 4px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: #a0aec0; animation: bounce 1.2s ease-in-out infinite; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); opacity: 0.6; } 40% { transform: translateY(-6px); opacity: 1; } }
+        
+        #result-container { background: var(--white-color); border-radius: 16px; box-shadow: var(--shadow); padding: 36px; }
+        
+        .result-section { margin-bottom: 28px; border-bottom: 1px solid var(--border-color); padding-bottom: 18px; }
+        .result-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    
+        .result-section h2 { color: var(--primary-dark); font-size: 1.45em; margin-bottom: 14px; letter-spacing: -0.01em; }
+        
+        .result-section h3 {
+            color: var(--heading-color);
+            font-size: 1.25em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        ul, ol { padding-left: 22px; }
+        li { margin-bottom: 10px; line-height: 1.7; }
+        
+        .module { background-color: var(--secondary-color); padding: 18px; border-radius: 12px; margin-bottom: 16px; border-left: 4px solid var(--primary-color); }
+        @media (max-width: 640px) { .header h1 { font-size: 2.1em; } .header p { font-size: 1.02em; } .container { padding: 0 4px; } .input-section { flex-direction: column; gap: 12px; } #course-topic-input { font-size: 1em; padding: 12px; } #generate-btn { width: 100%; padding: 12px 20px; font-size: 1em; } #result-container { padding: 24px; } }
+    </style>
+</head>
+<body>
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <div class="brand">Darwin · AI Education</div>
+      <button class="hamburger" aria-label="展开导航">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="links">
+        <a href="/">首页</a>
+        <a href="/thought/khanmigo_review.html">Khanmigo 深度剖析</a>
+        <a href="/practice/index.html">苏格拉底机器人</a>
+        <a href="/vision/index.html">智能课程架构师</a>
+      </div>
+    </div>
+  </nav>
+
+    <div class="container">
+        <header class="header">
+            <h1>智能课程架构师</h1>
+            <p>输入一个你想教授的主题，AI 将为你生成一份专业、完整的课程大纲，助你开启教学设计的第一步。</p>
+        </header>
+    
+        <section class="input-section">
+            <input type="text" id="course-topic-input" placeholder="例如：给10岁孩子讲量子力学">
+            <button id="generate-btn">生成大纲</button>
+        </section>
+    
+        <!-- 加载提示，默认隐藏 -->
+        <section id="loader" style="display: none;">
+            <div class="loading-wrap">
+                <div class="spinner" aria-hidden="true"></div>
+                <div aria-live="polite" aria-busy="true">正在生成课程大纲 <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div>
+            </div>
+        </section>
+    
+        <!-- 结果展示区，默认隐藏 -->
+        <section id="result-container" style="display: none;">
+            <!-- JavaScript 将在这里填充内容 -->
+        </section>
+    </div>
+    
+    <script>
+        // DOM 获取
+        const topicInput = document.getElementById('course-topic-input');
+        const generateBtn = document.getElementById('generate-btn');
+        const loader = document.getElementById('loader');
+        const resultContainer = document.getElementById('result-container');
+
+        // UI 工具函数
+        function showLoader() { loader.style.display = 'block'; }
+        function hideLoader() { loader.style.display = 'none'; }
+        function clearResult() { resultContainer.innerHTML = ''; }
+        function hideResult() { resultContainer.style.display = 'none'; }
+        function showResult() { resultContainer.style.display = 'block'; }
+
+        function renderResult(data) {
+            clearResult();
+            const { courseTitle, modules = [] } = data || {};
+            const titleSection = document.createElement('div');
+            titleSection.className = 'result-section';
+            titleSection.innerHTML = `<h2>课程标题</h2><p>${courseTitle || '未命名课程'}</p>`;
+            resultContainer.appendChild(titleSection);
+
+            const modulesSection = document.createElement('div');
+            modulesSection.className = 'result-section';
+            modulesSection.innerHTML = `<h2>课程模块</h2>`;
+            resultContainer.appendChild(modulesSection);
+
+            modules.forEach((m, idx) => {
+                const mod = document.createElement('div');
+                mod.className = 'module';
+                const safeTitle = m.title || `模块 ${idx + 1}`;
+                const points = Array.isArray(m.points) ? m.points : [];
+                const listHtml = points.map(pt => `<li>${pt}</li>`).join('');
+                mod.innerHTML = `<h3>${safeTitle}</h3><ul>${listHtml}</ul>`;
+                modulesSection.appendChild(mod);
+            });
+        }
+
+        // 主流程
+        async function handleGenerate() {
+            const topic = (topicInput.value || '').trim();
+            if (!topic) return;
+            generateBtn.disabled = true;
+            topicInput.disabled = true;
+            showLoader();
+            hideResult();
+
+            const payload = { topic };
+            let resultData;
+            try {
+                const resp = await fetch('/api/generate_course', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!resp.ok) throw new Error('Bad response');
+                resultData = await resp.json();
+            } catch (e) {
+                await new Promise(r => setTimeout(r, 1200));
+                resultData = {
+                    courseTitle: `${topic}（示例大纲）`,
+                    modules: [
+                        { title: '模块1：破冰与概念直觉', points: ['用生活中的例子引出微观世界概念','让孩子对“不确定性”产生兴趣'] },
+                        { title: '模块2：核心理念精讲', points: ['用比喻解释波粒二象性','引导孩子理解量子叠加现象'] }
+                    ]
+                };
+            }
+
+            hideLoader();
+            renderResult(resultData);
+            showResult();
+            generateBtn.disabled = false;
+            topicInput.disabled = false;
+            topicInput.focus();
+        }
+
+        // 事件绑定
+        generateBtn.addEventListener('click', handleGenerate);
+        topicInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); handleGenerate(); }
+        });
+        const toggleBtnDisabled = () => {
+            const empty = !(topicInput.value || '').trim();
+            generateBtn.disabled = empty;
+        };
+        topicInput.addEventListener('input', toggleBtnDisabled);
+        toggleBtnDisabled();
+    </script>
+
+  <script src="../assets/common.js"></script>
+</body>
+</html>

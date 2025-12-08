@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>深度剖析: Khanmigo - 安俭钊的作品</title>
+  <link rel="stylesheet" href="../assets/global.css">
+  <link rel="stylesheet" href="../assets/navbar.css">
+  <style>
+    :root {
+      --bg-color: #0a0a0a;
+      --text-primary: #ffffff;
+      --text-secondary: #c2c2c2;
+      --border-color: #2a2a2a;
+      --accent-color: #6366f1;
+      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      --card-bg: rgba(255,255,255,0.05);
+      --hover-bg: rgba(255,255,255,0.08);
+      --nav-bg: rgba(10,10,10,0.35);
+      --nav-border: rgba(255,255,255,0.08);
+      --nav-text: #ffffff;
+    }
+    body { font-family: "Inter", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif; line-height: 1.8; color: var(--text-primary); margin: 0; background-color: var(--bg-color); }
+    .navbar { backdrop-filter: blur(10px); }
+    .container { max-width: 1000px; margin: 100px auto 60px; padding: 32px; background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 30px 80px rgba(99,102,241,0.12); }
+    h1, h2, h3, h4 { color: var(--text-primary); line-height: 1.35; font-weight: 700; letter-spacing: -0.01em; }
+    h1 { font-size: 2.6em; text-align: center; margin: 8px 0 18px; }
+    h2 { font-size: 1.8em; margin: 28px 0 14px; position: relative; }
+    h2::after { content: ""; position: absolute; left: 0; bottom: -8px; width: 72px; height: 2px; background: var(--accent-gradient); border-radius: 2px; }
+    h3 { font-size: 1.4em; color: var(--accent-color); margin: 22px 0 10px; }
+    h4 { font-size: 1.16em; color: var(--text-primary); margin: 18px 0 8px; }
+    p { margin-bottom: 1.2em; font-size: 1.05em; color: var(--text-secondary); }
+    .author-info { text-align: center; color: var(--text-secondary); margin-bottom: 24px; font-size: 0.95em; }
+    .header-image { width: 100%; border-radius: 16px; margin-bottom: 22px; box-shadow: 0 20px 60px rgba(2,6,23,0.35); border: 1px solid var(--border-color); }
+    .framework-image { width: 100%; max-width: 720px; margin: 10px auto 0; display: block; border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 10px 30px rgba(2,6,23,0.25); }
+    .section { margin: 32px 0; }
+    .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; backdrop-filter: blur(12px); }
+    .two-col { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 24px; align-items: start; }
+    .caption { text-align: center; color: var(--text-secondary); font-size: 0.92em; margin-top: 8px; }
+    .list { display: grid; gap: 10px; }
+    .list-item { color: var(--text-secondary); }
+    .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 0.95em; color: var(--text-secondary); }
+    .dialog { display: grid; gap: 14px; }
+    .msg { display: flex; gap: 10px; }
+    .avatar { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-weight: 700; }
+    .bubble { flex: 1; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; color: var(--text-secondary); }
+    .bubble strong { color: var(--text-primary); }
+    .radar-wrap { padding: 16px; }
+    canvas { width: 100%; height: 320px; }
+    @media (max-width: 768px) {
+      .container { margin: 80px 12px 40px; padding: 20px; }
+      .two-col { grid-template-columns: 1fr; }
+      h1 { font-size: 2.2em; }
+      h2 { font-size: 1.6em; }
+    }
+  </style>
+</head>
+<body class="has-navbar">
+    <nav class="navbar" aria-label="主导航">
+      <div class="nav-inner">
+        <div class="brand">Darwin · AI Education</div>
+        <button class="hamburger" aria-label="展开导航">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="links">
+          <a href="/">首页</a>
+          <a href="/thought/khanmigo_review.html">Khanmigo 深度剖析</a>
+          <a href="/practice/index.html">苏格拉底机器人</a>
+          <a href="/vision/index.html">智能课程架构师</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <section class="hero section">
+        <img src="header.png" alt="Khanmigo 深度剖析文章头图" class="header-image">
+        <h1>AI 作为虚拟导师的黎明：Khanmigo 深度剖析</h1>
+        <div class="author-info">作者：安俭钊 · 发布日期：2025‑11‑14 · 原创分析</div>
+        <p>本文基于原创评估框架，对 Khanmigo 的教学法、交互与技术实现进行系统化剖析，探讨其在推动教育公平与思维训练方面的真实价值与边界。</p>
+      </section>
+
+      <section class="section background">
+        <h2>背景与挑战</h2>
+        <p>教育的复杂性来自于课程的非标性质：评价“好坏”并不容易，导致供给质量参差不齐。在这一现实背景下，AI 如果只充当“答案机”，不仅无法提升学习质量，反而可能削弱思维训练。Khanmigo 的设计哲学以“不给答案”为核心，试图将 AI 从知识分发工具转向以对话促进深度思考的虚拟导师。</p>
+        <p>本文以“三维评估框架”为抓手，从教学法、交互与技术三方面识别其优势与短板，并提出改进方向。</p>
+      </section>
+
+      <section class="section methodology">
+        <h2>分析方法论</h2>
+        <div class="two-col card">
+          <div>
+            <img src="framework.png" alt="AI 教学能力评估三维框架" class="framework-image">
+            <p class="caption">图 1：AI 教学能力评估三维框架</p>
+          </div>
+          <div>
+            <h3>1. 教学法维度 (Pedagogy)</h3>
+            <p>评估是否遵循科学教学原则，如苏格拉底式引导、分层难度与个性化反馈，关注“不给答案”的策略是否促进迁移与反思。</p>
+            <h3>2. 交互维度 (Interaction)</h3>
+            <p>衡量对话的连贯性、响应速度、纠错与提示的可解释性，观察交互是否降低提问成本并维持动机。</p>
+            <h3>3. 技术维度 (Technology)</h3>
+            <p>分析模型准确性、幻觉控制与知识边界管理，评估在受限知识库内的表现与长期个性化的可行性。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section assessment">
+        <h2>核心能力评估</h2>
+        <div class="card radar-wrap">
+          <canvas id="radarChart" aria-label="Khanmigo 能力雷达图" role="img"></canvas>
+        </div>
+      </section>
+
+      <section class="section cases">
+        <h2>深度案例分析</h2>
+        <div class="card dialog">
+          <div class="msg">
+            <div class="avatar">学</div>
+            <div class="bubble"><strong>问题：</strong>我不会解这个方程 x^2 − 5x + 6 = 0。</div>
+          </div>
+          <div class="msg">
+            <div class="avatar">AI</div>
+            <div class="bubble"><strong>引导：</strong>你能把这个二次式分解成两个一次因式吗？先找和为 5、积为 6 的两个数。</div>
+          </div>
+          <div class="msg">
+            <div class="avatar">学</div>
+            <div class="bubble"><strong>尝试：</strong>2 和 3？那是 (x − 2)(x − 3)。</div>
+          </div>
+          <div class="msg">
+            <div class="avatar">AI</div>
+            <div class="bubble"><strong>反馈：</strong>很好！接下来分别令每个因式为 0，你得到的两个解是什么？</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px;">
+          <h3>观察与结论</h3>
+          <div class="list">
+            <div class="list-item">引导式对话显著降低“不会做”时的挫败感，维持动机。</div>
+            <div class="list-item">不给答案但给方法，促使学生形成可迁移的解题策略。</div>
+            <div class="list-item">在受限知识库下，准确性与可解释性更稳定。</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section conclusion">
+        <h2>总结与展望</h2>
+        <p>Khanmigo 更像“单次对话教练”而非“长期成长顾问”。面向未来，建议在学习路径记忆、误区识别与跨任务迁移上继续强化，使其从“对话教练”走向“学习伙伴”。</p>
+        <p>更重要的是，它为行业提供了清晰信号：AI 应当成为思维的放大器，而非答案分发机。以此为导向的产品，将更接近教育的本质。</p>
+      </section>
+
+      <div class="footer">&copy; 2025 安俭钊. All Rights Reserved.</div>
+    </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+  <script>
+    const ctx = document.getElementById('radarChart');
+    if (ctx) {
+      const textPrimary = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#fff';
+      const textSecondary = getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim() || '#c2c2c2';
+      const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#6366f1';
+      new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['教学法', '交互性', '技术准确', '幻觉控制', '可解释', '个性化'],
+          datasets: [{
+            label: 'Khanmigo',
+            data: [88, 84, 90, 86, 82, 70],
+            borderColor: accent,
+            backgroundColor: 'rgba(99,102,241,0.25)',
+            pointBackgroundColor: accent,
+            pointBorderColor: '#fff'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { labels: { color: textSecondary } },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            r: {
+              angleLines: { color: 'rgba(255,255,255,0.15)' },
+              grid: { color: 'rgba(255,255,255,0.12)' },
+              pointLabels: { color: textPrimary, font: { size: 12 } },
+              ticks: { showLabelBackdrop: false, color: textSecondary }
+            }
+          }
+        }
+      });
+    }
+    const burger = document.querySelector('.hamburger');
+    const links = document.querySelector('.links');
+    if (burger && links) {
+      burger.addEventListener('click', () => links.classList.toggle('open'));
+    }
+  </script>
+  <script src="../assets/common.js"></script>
+</body>
+</html>
