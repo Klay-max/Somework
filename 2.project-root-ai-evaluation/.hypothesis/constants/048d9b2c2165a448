@@ -1,0 +1,4 @@
+# file: D:\桌面文件\作品集\project-root-ai evaluation\backend\app\schemas\ocr.py
+# hypothesis_version: 6.148.8
+
+[0.0, 1.0, 'OCR 提供商名称', 'handwritten', 'printed', '处理时间（秒）', '宽度', '左上角 X 坐标', '左上角 Y 坐标', '指定 OCR 提供商（可选）', '整体置信度', '文本区域列表', '文本类型：印刷体或手写', '置信度 (0-1)', '识别的文本内容', '试卷 ID', '边界框', '高度']

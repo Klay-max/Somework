@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b8866051-d83c-4361-b147-1819ed79cac4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../.gradle/config.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../local.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/assets/common.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/assets/css/main.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/assets/global.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/assets/images/profile-image.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/assets/images/profile-image2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/assets/images/profile-image3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/assets/js/app.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/assets/navbar.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/pictures/cover1.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/pictures/cover2.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/pictures/cover3.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/pictures/pic1.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/pictures/pic2.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/pictures/pic3.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/pictures/pic4.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/practice/api/server.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/practice/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/thought/framework.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/thought/header.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/thought/khanmigo_review.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vercel.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vision/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vision/portfolio/assets/common.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vision/portfolio/assets/global.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vision/portfolio/assets/navbar.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vision/portfolio/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vision/portfolio/projects/course-gen/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vision/portfolio/projects/khanmigo-review/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vision/portfolio/projects/socrates-bot/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vision/portfolio/projects/socrates-bot/server.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vision/projects/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../project-root/vision/vision-notes.md" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="37NJqMHOl2JwVzntjILRouWWRQA" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "android.gradle.sync.needed": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/桌面文件/作品集/project-root-ai evaluation/android/app"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b8866051-d83c-4361-b147-1819ed79cac4" name="Changes" comment="" />
+      <created>1766737784939</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1766737784939</updated>
+    </task>
+    <servers />
+  </component>
+</project>

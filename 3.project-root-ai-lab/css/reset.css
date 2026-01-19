@@ -1,0 +1,10 @@
+* { box-sizing: border-box }
+*::before, *::after { box-sizing: inherit }
+
+html, body { height: 100% }
+body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd { margin: 0 }
+ul, ol { margin: 0; padding: 0 }
+img, picture { max-width: 100%; display: block }
+button, input, textarea, select { font: inherit }
+input, button, textarea, select { border: none; background: transparent }
+a { text-decoration: none; color: inherit }

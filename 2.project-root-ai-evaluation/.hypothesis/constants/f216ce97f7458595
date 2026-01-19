@@ -1,0 +1,4 @@
+# file: D:\桌面文件\作品集\project-root-ai evaluation\backend\app\core\config.py
+# hypothesis_version: 6.148.8
+
+[0.8, 100.0, 200, 1024, 1080, 1920, '.env', '1.0.0', 'AI 试卷拍照测评工具', 'HS256', 'baidu', 'heic', 'jpeg', 'jpg', 'png']

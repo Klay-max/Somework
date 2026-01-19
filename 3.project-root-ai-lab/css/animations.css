@@ -1,0 +1,18 @@
+@keyframes glowPulse {
+  0% { text-shadow: 0 0 6px rgba(0, 255, 65, 0.6), 0 0 18px rgba(0, 255, 65, 0.35) }
+  50% { text-shadow: 0 0 10px rgba(0, 255, 65, 0.8), 0 0 28px rgba(0, 255, 65, 0.5) }
+  100% { text-shadow: 0 0 6px rgba(0, 255, 65, 0.6), 0 0 18px rgba(0, 255, 65, 0.35) }
+}
+
+.glow {
+  animation: glowPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes scanFlicker {
+  0%, 100% { opacity: 1 }
+  98% { opacity: 0.96 }
+}
+
+.scan {
+  animation: scanFlicker 6s linear infinite;
+}

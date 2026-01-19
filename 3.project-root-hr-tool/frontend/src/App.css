@@ -1,0 +1,104 @@
+/* Global styles for HR Document Analyzer */
+.App {
+  height: 100vh;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Issue highlighting styles */
+.issue-highlight {
+  background-color: #fff2f0;
+  border: 1px solid #ffccc7;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.issue-highlight.critical {
+  background-color: #fff1f0;
+  border-color: #ff4d4f;
+}
+
+.issue-highlight.high {
+  background-color: #fff7e6;
+  border-color: #ffa940;
+}
+
+.issue-highlight.medium {
+  background-color: #feffe6;
+  border-color: #ffec3d;
+}
+
+.issue-highlight.low {
+  background-color: #f6ffed;
+  border-color: #73d13d;
+}
+
+/* Fix preview styles */
+.fix-preview-diff {
+  font-family: 'Courier New', monospace;
+  line-height: 1.6;
+}
+
+.fix-preview-added {
+  background-color: #f6ffed;
+  color: #389e0d;
+}
+
+.fix-preview-removed {
+  background-color: #fff2f0;
+  color: #cf1322;
+  text-decoration: line-through;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .ant-col {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ant-layout-content {
+    padding: 12px;
+  }
+  
+  .ant-row {
+    flex-direction: column;
+  }
+  
+  .ant-col {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}

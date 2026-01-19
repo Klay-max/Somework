@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  # PostgreSQL 数据库
+  postgres:
+    image: postgres:15-alpine
+    container_name: exam_assessment_db_mock
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-examai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-examai}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_mock:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-examai}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+
+  # Redis 缓存和队列
+  redis:
+    image: redis:7-alpine
+    container_name: exam_assessment_redis_mock
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_mock:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+
+  # FastAPI 后端（Mock 模式）
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: exam_assessment_backend_mock
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-examai}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-examai}
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD}@redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD}@redis:6379/2
+      - SECRET_KEY=${SECRET_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - ENVIRONMENT=development
+      - LOG_LEVEL=debug
+      - USE_MOCK_SERVICES=true
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - upload_files_mock:/app/uploads
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - app_network
+
+  # Celery Worker（Mock 模式）
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: exam_assessment_celery_mock
+    command: celery -A app.tasks.celery_app worker --loglevel=info --concurrency=2
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-examai}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-examai}
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD}@redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD}@redis:6379/2
+      - SECRET_KEY=${SECRET_KEY}
+      - ENVIRONMENT=development
+      - USE_MOCK_SERVICES=true
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./backend:/app
+      - upload_files_mock:/app/uploads
+    networks:
+      - app_network
+
+volumes:
+  postgres_data_mock:
+  redis_data_mock:
+  upload_files_mock:
+
+networks:
+  app_network:
+    driver: bridge

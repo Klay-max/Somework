@@ -1,0 +1,2 @@
+// FileUpload component tests
+export {};

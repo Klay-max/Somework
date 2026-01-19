@@ -1,0 +1,78 @@
+com.examai.app-lifecycle-viewmodel-ktx-2.6.2-0 C:\Users\WIN10\.gradle\caches\8.13\transforms\0098952e5b9b17cb96df8985b9e9c540\transformed\lifecycle-viewmodel-ktx-2.6.2\res
+com.examai.app-lifecycle-viewmodel-2.6.2-1 C:\Users\WIN10\.gradle\caches\8.13\transforms\0166276c96bf01d081429a7cb734193d\transformed\lifecycle-viewmodel-2.6.2\res
+com.examai.app-lifecycle-runtime-compose-2.6.2-2 C:\Users\WIN10\.gradle\caches\8.13\transforms\02f74c1a0ac31c8eb745475d307ec102\transformed\lifecycle-runtime-compose-2.6.2\res
+com.examai.app-work-runtime-2.9.0-3 C:\Users\WIN10\.gradle\caches\8.13\transforms\04a0d1030e7e77bd899072f91b082fc6\transformed\work-runtime-2.9.0\res
+com.examai.app-sqlite-2.4.0-4 C:\Users\WIN10\.gradle\caches\8.13\transforms\0b198cb080ce5f060736970a1e46a9e4\transformed\sqlite-2.4.0\res
+com.examai.app-material-icons-extended-release-5 C:\Users\WIN10\.gradle\caches\8.13\transforms\0b366f3d9a39080cbd2606ed2255362e\transformed\material-icons-extended-release\res
+com.examai.app-lifecycle-livedata-core-2.6.2-6 C:\Users\WIN10\.gradle\caches\8.13\transforms\0c927f800ee7c261559c735681fc1f6e\transformed\lifecycle-livedata-core-2.6.2\res
+com.examai.app-emoji2-1.4.0-7 C:\Users\WIN10\.gradle\caches\8.13\transforms\0e4ac7e28fb697b11b47979263c8f644\transformed\emoji2-1.4.0\res
+com.examai.app-core-runtime-2.2.0-8 C:\Users\WIN10\.gradle\caches\8.13\transforms\1a6302be35732aea11be850c4fe3177e\transformed\core-runtime-2.2.0\res
+com.examai.app-coil-base-2.5.0-9 C:\Users\WIN10\.gradle\caches\8.13\transforms\2144fbeea814b4c81939ee83892acfc0\transformed\coil-base-2.5.0\res
+com.examai.app-ui-test-manifest-1.5.4-10 C:\Users\WIN10\.gradle\caches\8.13\transforms\24394770f78eefaec9c494d36301b103\transformed\ui-test-manifest-1.5.4\res
+com.examai.app-ui-tooling-preview-release-11 C:\Users\WIN10\.gradle\caches\8.13\transforms\31a1421674ad58195900b767ec5a29c6\transformed\ui-tooling-preview-release\res
+com.examai.app-work-runtime-ktx-2.9.0-12 C:\Users\WIN10\.gradle\caches\8.13\transforms\39d226c2bf89fb73ec13dcc47d1eb819\transformed\work-runtime-ktx-2.9.0\res
+com.examai.app-camera-view-1.3.0-13 C:\Users\WIN10\.gradle\caches\8.13\transforms\3a4b8e5cff7ee6d71043e82d6d81d681\transformed\camera-view-1.3.0\res
+com.examai.app-room-ktx-2.6.1-14 C:\Users\WIN10\.gradle\caches\8.13\transforms\3d7654281a708220d4b2f2d160a4490e\transformed\room-ktx-2.6.1\res
+com.examai.app-navigation-runtime-ktx-2.7.5-15 C:\Users\WIN10\.gradle\caches\8.13\transforms\40a80ad02be64293b827b9b749b7d3c9\transformed\navigation-runtime-ktx-2.7.5\res
+com.examai.app-lifecycle-livedata-2.6.2-16 C:\Users\WIN10\.gradle\caches\8.13\transforms\432c605596ec1f496d08f6def5701fa1\transformed\lifecycle-livedata-2.6.2\res
+com.examai.app-room-runtime-2.6.1-17 C:\Users\WIN10\.gradle\caches\8.13\transforms\49b5b7947b88c8cd78648866ba84a7b9\transformed\room-runtime-2.6.1\res
+com.examai.app-ui-text-release-18 C:\Users\WIN10\.gradle\caches\8.13\transforms\4be1fec2477fd4ab9cd4e5714b27bd84\transformed\ui-text-release\res
+com.examai.app-animation-release-19 C:\Users\WIN10\.gradle\caches\8.13\transforms\4ca2e3ffc1e87f09e38175f6a61f199c\transformed\animation-release\res
+com.examai.app-sqlite-framework-2.4.0-20 C:\Users\WIN10\.gradle\caches\8.13\transforms\4cd7180a66569cf9f4c827eaab1df57f\transformed\sqlite-framework-2.4.0\res
+com.examai.app-foundation-release-21 C:\Users\WIN10\.gradle\caches\8.13\transforms\55f8b6f1c5cb4525ef653901f5eed993\transformed\foundation-release\res
+com.examai.app-lifecycle-runtime-2.6.2-22 C:\Users\WIN10\.gradle\caches\8.13\transforms\56bd3ce2bddc6d7d20823d4df07e08a6\transformed\lifecycle-runtime-2.6.2\res
+com.examai.app-material-ripple-release-23 C:\Users\WIN10\.gradle\caches\8.13\transforms\56f1d6cd41e9495cc531e3afe9b9960e\transformed\material-ripple-release\res
+com.examai.app-appcompat-resources-1.6.1-24 C:\Users\WIN10\.gradle\caches\8.13\transforms\577758141b2cfa4b8677e21be4f02874\transformed\appcompat-resources-1.6.1\res
+com.examai.app-appcompat-1.6.1-25 C:\Users\WIN10\.gradle\caches\8.13\transforms\64081e379c3a6b09845168959cc8f409\transformed\appcompat-1.6.1\res
+com.examai.app-lifecycle-process-2.6.2-26 C:\Users\WIN10\.gradle\caches\8.13\transforms\6657ff3c50aaaf790fed9ec1da816b8b\transformed\lifecycle-process-2.6.2\res
+com.examai.app-core-1.12.0-27 C:\Users\WIN10\.gradle\caches\8.13\transforms\66ee9b9ab4a580771bf7cf85b5ccbf0a\transformed\core-1.12.0\res
+com.examai.app-ui-unit-release-28 C:\Users\WIN10\.gradle\caches\8.13\transforms\7000e5ed843450d15561acb17aa9ebe6\transformed\ui-unit-release\res
+com.examai.app-navigation-common-2.7.5-29 C:\Users\WIN10\.gradle\caches\8.13\transforms\70d5076f04fc212042e495b9c323401d\transformed\navigation-common-2.7.5\res
+com.examai.app-hilt-navigation-1.1.0-30 C:\Users\WIN10\.gradle\caches\8.13\transforms\73666d0f5658fcb5154d4c0c1c562ec5\transformed\hilt-navigation-1.1.0\res
+com.examai.app-activity-ktx-1.8.1-31 C:\Users\WIN10\.gradle\caches\8.13\transforms\771413440eb853fd1389363d2854fc64\transformed\activity-ktx-1.8.1\res
+com.examai.app-annotation-experimental-1.3.1-32 C:\Users\WIN10\.gradle\caches\8.13\transforms\77f72951a266c843acb95d22c7ff9df6\transformed\annotation-experimental-1.3.1\res
+com.examai.app-navigation-compose-2.7.5-33 C:\Users\WIN10\.gradle\caches\8.13\transforms\7d42ae0d55549b7468a0d92f9a0d36c3\transformed\navigation-compose-2.7.5\res
+com.examai.app-ui-util-release-34 C:\Users\WIN10\.gradle\caches\8.13\transforms\84c70931832ef83e10d02f3c13fbdacc\transformed\ui-util-release\res
+com.examai.app-startup-runtime-1.1.1-35 C:\Users\WIN10\.gradle\caches\8.13\transforms\8509b21a850808a15825f34c9043f408\transformed\startup-runtime-1.1.1\res
+com.examai.app-savedstate-ktx-1.2.1-36 C:\Users\WIN10\.gradle\caches\8.13\transforms\86c213c8c3f11be2fb9ba575ec82d267\transformed\savedstate-ktx-1.2.1\res
+com.examai.app-datastore-1.0.0-37 C:\Users\WIN10\.gradle\caches\8.13\transforms\89d598de938425dff025bfd03aca7379\transformed\datastore-1.0.0\res
+com.examai.app-ui-tooling-release-38 C:\Users\WIN10\.gradle\caches\8.13\transforms\8a8462f6ff051d5740f3445b7fb81c1d\transformed\ui-tooling-release\res
+com.examai.app-animation-core-release-39 C:\Users\WIN10\.gradle\caches\8.13\transforms\8b0dc5f444d8636945d06e5e6ad7b197\transformed\animation-core-release\res
+com.examai.app-navigation-runtime-2.7.5-40 C:\Users\WIN10\.gradle\caches\8.13\transforms\8c0042647b52f8c2f417fba2d88e9d82\transformed\navigation-runtime-2.7.5\res
+com.examai.app-activity-compose-1.8.1-41 C:\Users\WIN10\.gradle\caches\8.13\transforms\8d7846b169fcc50c8dbc77648b80131f\transformed\activity-compose-1.8.1\res
+com.examai.app-lifecycle-runtime-ktx-2.6.2-42 C:\Users\WIN10\.gradle\caches\8.13\transforms\8f1ea85465c3f26c8b8e5493322fe9d2\transformed\lifecycle-runtime-ktx-2.6.2\res
+com.examai.app-navigation-common-ktx-2.7.5-43 C:\Users\WIN10\.gradle\caches\8.13\transforms\90a7c8838dd0a8402820888f3a3a2ec4\transformed\navigation-common-ktx-2.7.5\res
+com.examai.app-customview-poolingcontainer-1.0.0-44 C:\Users\WIN10\.gradle\caches\8.13\transforms\92b1e2dbe3f2868d0f9a3cfdb36f3061\transformed\customview-poolingcontainer-1.0.0\res
+com.examai.app-profileinstaller-1.3.1-45 C:\Users\WIN10\.gradle\caches\8.13\transforms\9320b1335367f1d15e9a05c903799ede\transformed\profileinstaller-1.3.1\res
+com.examai.app-material-release-46 C:\Users\WIN10\.gradle\caches\8.13\transforms\947a7425a74af08d37f9bb05221ae8fe\transformed\material-release\res
+com.examai.app-ui-tooling-data-release-47 C:\Users\WIN10\.gradle\caches\8.13\transforms\969ba62aca739af7208cfcd94f93cb41\transformed\ui-tooling-data-release\res
+com.examai.app-emoji2-views-helper-1.4.0-48 C:\Users\WIN10\.gradle\caches\8.13\transforms\9af5e0d810b4dc13754f6cec6c68cdc2\transformed\emoji2-views-helper-1.4.0\res
+com.examai.app-hilt-work-1.1.0-49 C:\Users\WIN10\.gradle\caches\8.13\transforms\a0644dc94cd31010a0cf12da73991853\transformed\hilt-work-1.1.0\res
+com.examai.app-datastore-preferences-1.0.0-50 C:\Users\WIN10\.gradle\caches\8.13\transforms\a1f5c691875fbc5ba7e01cfa159baaf5\transformed\datastore-preferences-1.0.0\res
+com.examai.app-lifecycle-viewmodel-compose-2.6.2-51 C:\Users\WIN10\.gradle\caches\8.13\transforms\a212fbfc8483e5d197fd0dfcd3288ef8\transformed\lifecycle-viewmodel-compose-2.6.2\res
+com.examai.app-lifecycle-service-2.6.2-52 C:\Users\WIN10\.gradle\caches\8.13\transforms\a6422fe0e69d0342df3d6b6c848e97b9\transformed\lifecycle-service-2.6.2\res
+com.examai.app-material-icons-core-release-53 C:\Users\WIN10\.gradle\caches\8.13\transforms\a7b97f758f610ec8be3270532b5416b7\transformed\material-icons-core-release\res
+com.examai.app-core-ktx-1.12.0-54 C:\Users\WIN10\.gradle\caches\8.13\transforms\a9fcac011e009978d5d5453fad81049c\transformed\core-ktx-1.12.0\res
+com.examai.app-camera-core-1.3.0-55 C:\Users\WIN10\.gradle\caches\8.13\transforms\aaa247a7337d60668986c5629c59a6a6\transformed\camera-core-1.3.0\res
+com.examai.app-foundation-layout-release-56 C:\Users\WIN10\.gradle\caches\8.13\transforms\b8507b48b868a93230f91112896c5a8f\transformed\foundation-layout-release\res
+com.examai.app-fragment-1.5.1-57 C:\Users\WIN10\.gradle\caches\8.13\transforms\be977c64ffd699ec546f5e30ecb2c8e2\transformed\fragment-1.5.1\res
+com.examai.app-activity-1.8.1-58 C:\Users\WIN10\.gradle\caches\8.13\transforms\c0db6df27e9b7f8c5ec544e94728bccb\transformed\activity-1.8.1\res
+com.examai.app-lifecycle-viewmodel-savedstate-2.6.2-59 C:\Users\WIN10\.gradle\caches\8.13\transforms\c6745de0f8fdf1e9959a48ba7c542bb5\transformed\lifecycle-viewmodel-savedstate-2.6.2\res
+com.examai.app-ui-release-60 C:\Users\WIN10\.gradle\caches\8.13\transforms\cbd800eb5d2a8c7e467e059c4065e095\transformed\ui-release\res
+com.examai.app-camera-lifecycle-1.3.0-61 C:\Users\WIN10\.gradle\caches\8.13\transforms\cfc36655fc66d937cd3976bba1fbcfbe\transformed\camera-lifecycle-1.3.0\res
+com.examai.app-ui-geometry-release-62 C:\Users\WIN10\.gradle\caches\8.13\transforms\d140fe901c34a383fef85532623eb535\transformed\ui-geometry-release\res
+com.examai.app-material3-1.1.2-63 C:\Users\WIN10\.gradle\caches\8.13\transforms\d2237cfd0fdd242818dbf5f90cde0ae0\transformed\material3-1.1.2\res
+com.examai.app-camera-video-1.3.0-64 C:\Users\WIN10\.gradle\caches\8.13\transforms\d2d803fd2752ea6fb3a3f1a119ab3ca4\transformed\camera-video-1.3.0\res
+com.examai.app-savedstate-1.2.1-65 C:\Users\WIN10\.gradle\caches\8.13\transforms\d7d2203d4a5039584ea1e58b119d4330\transformed\savedstate-1.2.1\res
+com.examai.app-ui-graphics-release-66 C:\Users\WIN10\.gradle\caches\8.13\transforms\dad39956356312830ac5528c66afd888\transformed\ui-graphics-release\res
+com.examai.app-hilt-navigation-compose-1.1.0-67 C:\Users\WIN10\.gradle\caches\8.13\transforms\e8f0dd68492553508cecb191c1c873b6\transformed\hilt-navigation-compose-1.1.0\res
+com.examai.app-camera-camera2-1.3.0-68 C:\Users\WIN10\.gradle\caches\8.13\transforms\fc1ae3439f90201f87a6cee02c0dabda\transformed\camera-camera2-1.3.0\res
+com.examai.app-runtime-saveable-release-69 C:\Users\WIN10\.gradle\caches\8.13\transforms\fd38e37c589840d6fdc0afa5a15ff1e2\transformed\runtime-saveable-release\res
+com.examai.app-runtime-release-70 C:\Users\WIN10\.gradle\caches\8.13\transforms\fe6973636f55fc29f935daefbbaeb4b5\transformed\runtime-release\res
+com.examai.app-resValues-71 D:\桌面文件\project-root\project-root-ai evaluation\android\app\build\generated\res\resValues\debug
+com.examai.app-updated_navigation_xml-72 D:\桌面文件\project-root\project-root-ai evaluation\android\app\build\generated\updated_navigation_xml\debug
+com.examai.app-packageDebugResources-73 D:\桌面文件\project-root\project-root-ai evaluation\android\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.examai.app-packageDebugResources-74 D:\桌面文件\project-root\project-root-ai evaluation\android\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.examai.app-debug-75 D:\桌面文件\project-root\project-root-ai evaluation\android\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.examai.app-debug-76 D:\桌面文件\project-root\project-root-ai evaluation\android\app\src\debug\res
+com.examai.app-main-77 D:\桌面文件\project-root\project-root-ai evaluation\android\app\src\main\res
