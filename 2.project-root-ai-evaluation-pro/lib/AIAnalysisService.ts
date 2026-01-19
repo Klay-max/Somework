@@ -121,15 +121,23 @@ export class AIAnalysisService {
    * @returns 错误分析结果
    */
   static async analyzeErrors(
-    gradingResult: GradingResult
+    gradingResult: { 
+      wrongAnswers: Array<{ 
+        questionId?: string;
+        questionNumber?: number;
+        userAnswer: string; 
+        correctAnswer: string;
+      }>;
+      [key: string]: any;
+    }
   ): Promise<AnalysisResult> {
     try {
       // Mock 模式
       if (isMockEnabled()) {
         console.log('[AIAnalysisService] 使用 Mock 错误分析');
         const wrongAnswers = gradingResult.wrongAnswers.map(wa => ({
-          questionNumber: wa.questionNumber,
-          studentAnswer: wa.studentAnswer,
+          questionNumber: wa.questionNumber || parseInt(wa.questionId || '0'),
+          studentAnswer: wa.userAnswer,
           correctAnswer: wa.correctAnswer,
         }));
         const result = await MockApiService.analyzeErrors(wrongAnswers);
@@ -137,6 +145,7 @@ export class AIAnalysisService {
           surfaceIssues: result.surfaceIssues,
           rootCauses: result.rootCauses,
           aiComment: result.aiComment,
+          knowledgeGaps: result.knowledgeGaps,
         };
       }
       
@@ -197,7 +206,15 @@ export class AIAnalysisService {
         console.log('[AIAnalysisService] 使用 Mock 学习路径');
         const weakPoints = analysisResult.rootCauses || [];
         const result = await MockApiService.generateLearningPath(weakPoints);
-        return { stages: result.stages };
+        // 为每个阶段添加 id，并添加总时长和目标分数
+        return { 
+          stages: result.stages.map((stage, index) => ({
+            id: `stage-${index + 1}`,
+            ...stage
+          })),
+          estimatedDuration: '7 周',
+          targetScore: 90
+        };
       }
       
       // 生成缓存键（基于分析结果）
@@ -249,7 +266,7 @@ export class AIAnalysisService {
    * @returns 包含分析结果和学习路径的对象
    */
   static async performFullAnalysis(
-    gradingResult: GradingResult
+    gradingResult: any
   ): Promise<{
     analysis: AnalysisResult;
     learningPath: LearningPath;

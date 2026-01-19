@@ -1,5 +1,5 @@
 /**
- * VISION-CORE 数据类型定义
+ * 安辅导 数据类型定义
  * 
  * 本文件定义了应用中使用的所有数据模型接口
  */
@@ -102,13 +102,12 @@ export interface GradingResult {
   correctCount: number;         // 正确题数
   wrongCount: number;           // 错误题数
   answers: Answer[];            // 答案详情列表
-  dimensionScores: {            // 各维度得分
-    listening: number;
-    grammar: number;
-    reading: number;
-    cloze: number;
-    logic: number;
-  };
+  wrongAnswers: Answer[];       // 错题列表
+  dimensionScores: Array<{      // 各维度得分
+    dimension: string;
+    score: number;
+    maxScore: number;
+  }>;
 }
 
 /**

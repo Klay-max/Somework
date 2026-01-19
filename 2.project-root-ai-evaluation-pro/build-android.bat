@@ -1,6 +1,6 @@
 @echo off
 echo ========================================
-echo VISION-CORE Android 构建脚本
+echo 安辅导 Android 构建脚本
 echo ========================================
 echo.
 

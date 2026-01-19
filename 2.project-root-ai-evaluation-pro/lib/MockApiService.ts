@@ -52,6 +52,7 @@ export interface MockAnalysisResult {
   surfaceIssues: string[];
   rootCauses: string[];
   aiComment: string;
+  knowledgeGaps: string[];
 }
 
 /**
@@ -124,19 +125,23 @@ export class MockApiService {
     let surfaceIssues: string[];
     let rootCauses: string[];
     let aiComment: string;
+    let knowledgeGaps: string[];
     
     if (errorCount <= 5) {
       surfaceIssues = ['个别题目粗心', '时间分配不均'];
       rootCauses = ['基础扎实，偶有疏忽'];
       aiComment = '整体表现优秀！只有少量错题，主要是粗心导致。建议做题时更加细心，注意审题。';
+      knowledgeGaps = ['审题技巧', '时间管理'];
     } else if (errorCount <= 15) {
       surfaceIssues = ['部分知识点掌握不牢', '解题思路不够清晰', '时间管理需要改进'];
       rootCauses = ['基础知识有漏洞', '缺乏系统训练'];
       aiComment = '你的基础还不错，但在某些知识点上需要加强。建议针对错题涉及的知识点进行专项训练，并多做类似题目巩固。';
+      knowledgeGaps = ['虚拟语气', '被动语态', '定语从句', '完形填空技巧'];
     } else {
       surfaceIssues = ['多个知识点掌握不足', '解题方法欠缺', '基础概念模糊'];
       rootCauses = ['基础知识薄弱', '缺乏系统学习', '练习量不足'];
       aiComment = '需要系统性地复习基础知识。建议从基础概念开始，逐步建立知识体系，并通过大量练习巩固。不要急于求成，打好基础最重要。';
+      knowledgeGaps = ['基础语法', '词汇量', '阅读理解', '长难句分析', '写作技巧', '听力训练'];
     }
     
     return {
@@ -144,6 +149,7 @@ export class MockApiService {
       surfaceIssues,
       rootCauses,
       aiComment,
+      knowledgeGaps,
     };
   }
   

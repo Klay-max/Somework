@@ -88,7 +88,7 @@ export default function ReportPage() {
       if (navigator.share) {
         try {
           await navigator.share({
-            title: 'VISION-CORE 诊断报告',
+            title: '安辅导 诊断报告',
             text: shareText,
           });
         } catch (err) {
@@ -249,7 +249,7 @@ export default function ReportPage() {
             <Text style={styles.footerText}>
               报告生成时间: {new Date(reportData.timestamp).toLocaleString('zh-CN')}
             </Text>
-            <Text style={styles.footerCopyright}>VISION-CORE © 2026</Text>
+            <Text style={styles.footerCopyright}>安辅导 © 2026</Text>
           </View>
         </View>
       </ScrollView>

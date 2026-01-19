@@ -12,7 +12,7 @@
 
 2. **splash.png** - 启动屏幕 (1242x2436 px)
    - 纯黑背景
-   - 中央显示 VISION-CORE logo
+   - 中央显示 安辅导 logo
 
 3. **adaptive-icon.png** - Android 自适应图标 (1024x1024 px)
    - 前景图层，透明背景
