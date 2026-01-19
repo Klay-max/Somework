@@ -50,7 +50,7 @@ export function CameraView({ onCapture }: CameraViewProps) {
           </Text>
 
           <Text className="text-gray-400 text-sm text-center mt-2">
-            VISION-CORE 需要访问您的相机以进行扫描功能
+            安辅导需要访问您的相机以进行扫描功能
           </Text>
 
           <TouchableOpacity

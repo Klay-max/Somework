@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "VISION-CORE",
-    "slug": "vision-core",
+    "name": "安辅导",
+    "slug": "anfudao",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,14 +16,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.visioncore.app"
+      "bundleIdentifier": "com.anfudao.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.visioncore.app",
+      "package": "com.anfudao.app",
       "versionCode": 1,
       "permissions": [
         "android.permission.CAMERA",
@@ -41,11 +41,11 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow VISION-CORE to access your camera for scanning."
+          "cameraPermission": "允许安辅导访问您的相机以进行扫描功能"
         }
       ]
     ],
-    "scheme": "vision-core",
+    "scheme": "anfudao",
     "extra": {
       "router": {
         "origin": false

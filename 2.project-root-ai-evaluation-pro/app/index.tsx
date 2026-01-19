@@ -63,8 +63,8 @@ export default function Dashboard() {
               style={styles.mainButton}
               onPress={handleStartScan}
             >
-              <Text style={styles.mainButtonText}>启动视觉诊断</Text>
-              <Text style={styles.mainButtonSubtext}>INITIATE SCAN</Text>
+              <Text style={styles.mainButtonText}>开始AI诊断</Text>
+              <Text style={styles.mainButtonSubtext}>START AI DIAGNOSIS</Text>
             </TouchableOpacity>
 
             {/* 历史记录按钮 */}

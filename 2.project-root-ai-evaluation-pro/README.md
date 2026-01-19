@@ -1,6 +1,6 @@
-# VISION-CORE
+# 安辅导
 
-赛博朋克风格的教育测评应用，支持 Web 和移动端（Android/iOS）双平台。
+赛博朋克风格的 AI 教育测评应用，支持 Web 和移动端（Android/iOS）双平台。
 
 ## 技术栈
 
