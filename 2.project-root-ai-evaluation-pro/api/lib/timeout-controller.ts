@@ -12,10 +12,10 @@
  * 超时配置
  */
 export const TIMEOUT_CONFIG = {
-  ocr: parseInt(process.env.OCR_TIMEOUT || '10000', 10),      // 10 秒
-  analyze: parseInt(process.env.ANALYZE_TIMEOUT || '15000', 10),  // 15 秒
-  generatePath: parseInt(process.env.GENERATE_PATH_TIMEOUT || '12000', 10), // 12 秒
-  default: parseInt(process.env.DEFAULT_TIMEOUT || '30000', 10),   // 30 秒
+  ocr: parseInt(process.env.OCR_TIMEOUT || '30000', 10),      // 30 秒（从 10 秒增加）
+  analyze: parseInt(process.env.ANALYZE_TIMEOUT || '30000', 10),  // 30 秒（从 15 秒增加）
+  generatePath: parseInt(process.env.GENERATE_PATH_TIMEOUT || '30000', 10), // 30 秒（从 12 秒增加）
+  default: parseInt(process.env.DEFAULT_TIMEOUT || '60000', 10),   // 60 秒（从 30 秒增加）
 };
 
 /**
