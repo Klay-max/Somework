@@ -1,10 +1,12 @@
 /**
  * AI 分析服务客户端
  * 负责调用后端 API 进行错误分析和学习路径生成
+ * 支持 Mock 模式用于离线开发
  */
 
 import { apiClient, ApiError } from './ApiClient';
 import { CacheService } from './CacheService';
+import { MockApiService, isMockEnabled } from './MockApiService';
 import type { 
   AnalysisResult, 
   LearningPath, 
@@ -37,7 +39,7 @@ export class APIError extends ApiError {
  */
 export class AIAnalysisService {
   /**
-   * OCR 识别答题卡（带缓存）
+   * OCR 识别答题卡（带缓存 + Mock 支持）
    * @param imageBase64 图像的 Base64 编码（包含 data:image/jpeg;base64, 前缀）
    * @returns OCR 识别结果
    */
@@ -46,7 +48,14 @@ export class AIAnalysisService {
   ): Promise<{ text: string; confidence: number }> {
     try {
       console.log('[AIAnalysisService] 开始 OCR 识别...');
+      console.log('[AIAnalysisService] Mock 模式:', isMockEnabled() ? '启用' : '禁用');
       console.log('[AIAnalysisService] 图像大小:', imageBase64.length, '字符');
+      
+      // Mock 模式
+      if (isMockEnabled()) {
+        console.log('[AIAnalysisService] 使用 Mock OCR');
+        return await MockApiService.performOCR(imageBase64);
+      }
       
       // 生成缓存键
       const cacheKey = await CacheService.hashImage(imageBase64);
@@ -115,6 +124,22 @@ export class AIAnalysisService {
     gradingResult: GradingResult
   ): Promise<AnalysisResult> {
     try {
+      // Mock 模式
+      if (isMockEnabled()) {
+        console.log('[AIAnalysisService] 使用 Mock 错误分析');
+        const wrongAnswers = gradingResult.wrongAnswers.map(wa => ({
+          questionNumber: wa.questionNumber,
+          studentAnswer: wa.studentAnswer,
+          correctAnswer: wa.correctAnswer,
+        }));
+        const result = await MockApiService.analyzeErrors(wrongAnswers);
+        return {
+          surfaceIssues: result.surfaceIssues,
+          rootCauses: result.rootCauses,
+          aiComment: result.aiComment,
+        };
+      }
+      
       // 生成缓存键（基于评分结果）
       const cacheKey = `analyze_${JSON.stringify(gradingResult).substring(0, 100)}`;
       
@@ -159,7 +184,7 @@ export class AIAnalysisService {
   }
 
   /**
-   * 生成个性化学习路径（带缓存）
+   * 生成个性化学习路径（带缓存 + Mock 支持）
    * @param analysisResult 错误分析结果
    * @returns 学习路径
    */
@@ -167,6 +192,14 @@ export class AIAnalysisService {
     analysisResult: AnalysisResult
   ): Promise<LearningPath> {
     try {
+      // Mock 模式
+      if (isMockEnabled()) {
+        console.log('[AIAnalysisService] 使用 Mock 学习路径');
+        const weakPoints = analysisResult.rootCauses || [];
+        const result = await MockApiService.generateLearningPath(weakPoints);
+        return { stages: result.stages };
+      }
+      
       // 生成缓存键（基于分析结果）
       const cacheKey = `path_${JSON.stringify(analysisResult).substring(0, 100)}`;
       
