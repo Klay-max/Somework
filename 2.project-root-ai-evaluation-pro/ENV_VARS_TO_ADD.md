@@ -10,7 +10,7 @@ vercel env add ALICLOUD_ACCESS_KEY_ID
 
 **提示时输入**：
 ```
-LTAI5tAQPefJFx33c4BfiHK7
+你的阿里云AccessKey ID
 ```
 
 **选择环境**：用空格键选择所有三个（Production, Preview, Development），然后按 Enter
@@ -25,7 +25,7 @@ vercel env add ALICLOUD_ACCESS_KEY_SECRET
 
 **提示时输入**：
 ```
-v8FbXKxmNjioUq2QgGP727Gjaz7PV9
+你的阿里云AccessKey Secret
 ```
 
 **选择环境**：用空格键选择所有三个（Production, Preview, Development），然后按 Enter
@@ -40,7 +40,7 @@ vercel env add DEEPSEEK_API_KEY
 
 **提示时输入**：
 ```
-sk-03fe6c3cfcb84ceeb959124252f2204b
+你的DeepSeek API Key
 ```
 
 **选择环境**：用空格键选择所有三个（Production, Preview, Development），然后按 Enter
@@ -51,17 +51,17 @@ sk-03fe6c3cfcb84ceeb959124252f2204b
 
 **ALICLOUD_ACCESS_KEY_ID**:
 ```
-LTAI5tAQPefJFx33c4BfiHK7
+你的阿里云AccessKey ID
 ```
 
 **ALICLOUD_ACCESS_KEY_SECRET**:
 ```
-v8FbXKxmNjioUq2QgGP727Gjaz7PV9
+你的阿里云AccessKey Secret
 ```
 
 **DEEPSEEK_API_KEY**:
 ```
-sk-03fe6c3cfcb84ceeb959124252f2204b
+你的DeepSeek API Key
 ```
 
 ---

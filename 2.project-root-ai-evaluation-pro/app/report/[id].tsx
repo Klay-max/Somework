@@ -12,7 +12,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { generateMockReport } from '@/lib/mockData';
 import { ScoreCore } from '@/components/report/ScoreCore';
-import { AbilityRadar } from '@/components/report/AbilityRadar';
+// import { AbilityRadar } from '@/components/report/AbilityRadar'; // 临时注释用于测试构建
 import { StorageService } from '@/lib/StorageService';
 import type { ReportData } from '@/lib/types';
 
@@ -135,10 +135,40 @@ export default function ReportPage() {
             <ScoreCore data={reportData.score} />
           </View>
 
-          {/* 五维能力雷达图 */}
-          <View style={styles.section}>
+          {/* 五维能力雷达图 - 临时注释用于测试构建 */}
+          {/* <View style={styles.section}>
             <Text style={styles.sectionTitle}>能力分析</Text>
             <AbilityRadar data={reportData.ability} />
+          </View> */}
+          
+          {/* 临时替代：显示能力数据 */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>能力分析</Text>
+            <View style={styles.card}>
+              <Text style={styles.cardSubtitle}>五维能力评估</Text>
+              <View style={styles.abilityList}>
+                <View style={styles.abilityItem}>
+                  <Text style={styles.abilityLabel}>听力理解</Text>
+                  <Text style={styles.abilityValue}>{reportData.ability.listening || 0}%</Text>
+                </View>
+                <View style={styles.abilityItem}>
+                  <Text style={styles.abilityLabel}>语法运用</Text>
+                  <Text style={styles.abilityValue}>{reportData.ability.grammar || 0}%</Text>
+                </View>
+                <View style={styles.abilityItem}>
+                  <Text style={styles.abilityLabel}>阅读理解</Text>
+                  <Text style={styles.abilityValue}>{reportData.ability.reading || 0}%</Text>
+                </View>
+                <View style={styles.abilityItem}>
+                  <Text style={styles.abilityLabel}>完形填空</Text>
+                  <Text style={styles.abilityValue}>{reportData.ability.cloze || 0}%</Text>
+                </View>
+                <View style={styles.abilityItem}>
+                  <Text style={styles.abilityLabel}>逻辑推理</Text>
+                  <Text style={styles.abilityValue}>{reportData.ability.logic || 0}%</Text>
+                </View>
+              </View>
+            </View>
           </View>
 
           {/* 深度分析 */}
@@ -428,6 +458,27 @@ const styles = StyleSheet.create({
   stageDuration: {
     color: '#888888',
     fontSize: 14,
+  },
+  // 临时能力列表样式
+  abilityList: {
+    gap: 16,
+  },
+  abilityItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333333',
+  },
+  abilityLabel: {
+    color: '#cccccc',
+    fontSize: 16,
+  },
+  abilityValue: {
+    color: '#00ffff',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   footer: {
     alignItems: 'center',

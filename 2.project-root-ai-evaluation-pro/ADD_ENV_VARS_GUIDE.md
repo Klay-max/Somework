@@ -23,7 +23,7 @@
 
 2. 填写第一个变量：
    - **Key**: `ALICLOUD_ACCESS_KEY_ID`
-   - **Value**: `LTAI5tAQPefJFx33c4BfiHK7`
+   - **Value**: `你的阿里云AccessKey ID`
    - **Environments**: 勾选所有三个
      - ✅ Production
      - ✅ Preview
@@ -37,7 +37,7 @@
 
 2. 填写：
    - **Key**: `ALICLOUD_ACCESS_KEY_SECRET`
-   - **Value**: `v8FbXKxmNjioUq2QgGP727Gjaz7PV9`
+   - **Value**: `你的阿里云AccessKey Secret`
    - **Environments**: 勾选所有三个
      - ✅ Production
      - ✅ Preview
@@ -51,7 +51,7 @@
 
 2. 填写：
    - **Key**: `DEEPSEEK_API_KEY`
-   - **Value**: `sk-03fe6c3cfcb84ceeb959124252f2204b`
+   - **Value**: `你的DeepSeek API Key`
    - **Environments**: 勾选所有三个
      - ✅ Production
      - ✅ Preview
@@ -95,13 +95,13 @@ https://vercel.com/klays-projects-3394eafa/somegood/settings/environment-variabl
 
 ```
 Key: ALICLOUD_ACCESS_KEY_ID
-Value: LTAI5tAQPefJFx33c4BfiHK7
+Value: 你的阿里云AccessKey ID
 
 Key: ALICLOUD_ACCESS_KEY_SECRET
-Value: v8FbXKxmNjioUq2QgGP727Gjaz7PV9
+Value: 你的阿里云AccessKey Secret
 
 Key: DEEPSEEK_API_KEY
-Value: sk-03fe6c3cfcb84ceeb959124252f2204b
+Value: 你的DeepSeek API Key
 ```
 
 每个都要勾选：Production, Preview, Development

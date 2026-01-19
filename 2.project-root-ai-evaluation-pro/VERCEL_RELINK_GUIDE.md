@@ -36,15 +36,15 @@ vercel link
 ```cmd
 # 添加阿里云 OCR AccessKey ID
 vercel env add ALICLOUD_ACCESS_KEY_ID
-# 粘贴：LTAI5tAQPefJFx33c4BfiHK7
+# 粘贴你的 AccessKey ID
 
 # 添加阿里云 OCR AccessKey Secret
 vercel env add ALICLOUD_ACCESS_KEY_SECRET
-# 粘贴：v8FbXKxmNjioUq2QgGP727Gjaz7PV9
+# 粘贴你的 AccessKey Secret
 
 # 添加 DeepSeek API Key
 vercel env add DEEPSEEK_API_KEY
-# 粘贴：sk-03fe6c3cfcb84ceeb959124252f2204b
+# 粘贴你的 DeepSeek API Key
 ```
 
 **重要**：每个环境变量添加时，会问你要添加到哪些环境：
@@ -118,9 +118,9 @@ rmdir /s /q .vercel
 1. 进入你的项目
 2. 点击 "Settings" → "Environment Variables"
 3. 添加三个变量：
-   - `ALICLOUD_ACCESS_KEY_ID` = `LTAI5tAQPefJFx33c4BfiHK7`
-   - `ALICLOUD_ACCESS_KEY_SECRET` = `v8FbXKxmNjioUq2QgGP727Gjaz7PV9`
-   - `DEEPSEEK_API_KEY` = `sk-03fe6c3cfcb84ceeb959124252f2204b`
+   - `ALICLOUD_ACCESS_KEY_ID` = `你的阿里云AccessKey ID`
+   - `ALICLOUD_ACCESS_KEY_SECRET` = `你的阿里云AccessKey Secret`
+   - `DEEPSEEK_API_KEY` = `你的DeepSeek API Key`
 
 ### 步骤 4：部署
 

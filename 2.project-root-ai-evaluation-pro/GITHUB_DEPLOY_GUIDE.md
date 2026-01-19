@@ -91,9 +91,9 @@ git push -u origin main
 
 | Name | Value |
 |------|-------|
-| `ALICLOUD_ACCESS_KEY_ID` | `LTAI5tAQPefJFx33c4BfiHK7` |
-| `ALICLOUD_ACCESS_KEY_SECRET` | `v8FbXKxmNjioUq2QgGP727Gjaz7PV9` |
-| `DEEPSEEK_API_KEY` | `sk-03fe6c3cfcb84ceeb959124252f2204b` |
+| `ALICLOUD_ACCESS_KEY_ID` | `你的阿里云AccessKey ID` |
+| `ALICLOUD_ACCESS_KEY_SECRET` | `你的阿里云AccessKey Secret` |
+| `DEEPSEEK_API_KEY` | `你的DeepSeek API Key` |
 
 ⚠️ **重要**：确保选择 "Production", "Preview", "Development" 三个环境都勾选。
 
