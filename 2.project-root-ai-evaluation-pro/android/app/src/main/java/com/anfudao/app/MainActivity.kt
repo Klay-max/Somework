@@ -1,4 +1,4 @@
-package com.visioncore.app
+package com.anfudao.app
 
 import android.os.Build
 import android.os.Bundle
