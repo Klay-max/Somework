@@ -3,6 +3,7 @@
     "name": "安辅导",
     "slug": "anfudao",
     "version": "1.0.0",
+    "sdkVersion": "51.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -29,7 +30,8 @@
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.INTERNET"
+        "android.permission.INTERNET",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -43,16 +45,25 @@
         {
           "cameraPermission": "允许安辅导访问您的相机以进行扫描功能"
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "scheme": "anfudao",
+    "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/c8da7706-b3ee-4fea-9d3a-49a39df4d973"
+    },
+    "runtimeVersion": "1.0.0",
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "2e29f265-5b20-428d-a7cb-9904613d6d75"
+        "projectId": "c8da7706-b3ee-4fea-9d3a-49a39df4d973"
       }
-    }
+    },
+    "owner": "klay215"
   }
 }
