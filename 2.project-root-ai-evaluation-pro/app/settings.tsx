@@ -8,16 +8,19 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Globe, Trash2, Info } from 'lucide-react-native';
+import { Globe, Trash2, Info, RefreshCw } from 'lucide-react-native';
 import { getCurrentLanguage, setLanguage, getSupportedLanguages, t } from '../lib/i18n';
 import { CacheService } from '../lib/CacheService';
+import * as Updates from 'expo-updates';
 
 export default function Settings() {
   const router = useRouter();
   const [currentLang, setCurrentLang] = useState(getCurrentLanguage());
   const [cacheSize, setCacheSize] = useState(0);
+  const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState<string>('');
 
   useEffect(() => {
     loadCacheSize();
@@ -70,6 +73,59 @@ export default function Settings() {
     );
   };
 
+  const handleCheckUpdate = async () => {
+    // 检查是否支持 OTA 更新
+    if (!Updates.isEnabled) {
+      Alert.alert('提示', '当前环境不支持 OTA 更新\n（开发模式下不可用）');
+      return;
+    }
+
+    setIsCheckingUpdate(true);
+    setUpdateInfo('正在检查更新...');
+
+    try {
+      // 检查是否有可用更新
+      const update = await Updates.checkForUpdateAsync();
+      
+      if (update.isAvailable) {
+        setUpdateInfo('发现新版本，正在下载...');
+        
+        // 下载更新
+        await Updates.fetchUpdateAsync();
+        
+        setUpdateInfo('');
+        setIsCheckingUpdate(false);
+        
+        // 提示用户重启应用
+        Alert.alert(
+          '更新已下载',
+          '应用将重启以应用更新',
+          [
+            {
+              text: '稍后',
+              style: 'cancel',
+            },
+            {
+              text: '立即重启',
+              onPress: async () => {
+                await Updates.reloadAsync();
+              },
+            },
+          ]
+        );
+      } else {
+        setUpdateInfo('');
+        setIsCheckingUpdate(false);
+        Alert.alert('提示', '当前已是最新版本');
+      }
+    } catch (error) {
+      console.error('检查更新失败:', error);
+      setUpdateInfo('');
+      setIsCheckingUpdate(false);
+      Alert.alert('错误', '检查更新失败，请稍后重试');
+    }
+  };
+
   const supportedLanguages = getSupportedLanguages();
 
   return (
@@ -90,7 +146,7 @@ export default function Settings() {
         {/* 语言设置 */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Globe color="#00ffff" size={24} />
+            <Globe color="#4A90E2" size={24} />
             <Text style={styles.sectionTitle}>{t('settings.language')}</Text>
           </View>
 
@@ -112,10 +168,44 @@ export default function Settings() {
           ))}
         </View>
 
+        {/* 检查更新 */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <RefreshCw color="#4A90E2" size={24} />
+            <Text style={styles.sectionTitle}>检查更新</Text>
+          </View>
+
+          <View style={styles.updateCard}>
+            <View style={styles.updateInfo}>
+              <Text style={styles.updateLabel}>当前版本</Text>
+              <Text style={styles.updateVersion}>1.0.0</Text>
+            </View>
+            
+            {updateInfo ? (
+              <View style={styles.updateStatusContainer}>
+                <ActivityIndicator size="small" color="#4A90E2" />
+                <Text style={styles.updateStatusText}>{updateInfo}</Text>
+              </View>
+            ) : null}
+          </View>
+
+          <TouchableOpacity
+            style={[styles.updateButton, isCheckingUpdate && styles.updateButtonDisabled]}
+            onPress={handleCheckUpdate}
+            disabled={isCheckingUpdate}
+          >
+            {isCheckingUpdate ? (
+              <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <Text style={styles.updateButtonText}>检查更新</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+
         {/* 缓存管理 */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Trash2 color="#00ffff" size={24} />
+            <Trash2 color="#4A90E2" size={24} />
             <Text style={styles.sectionTitle}>{t('settings.cache')}</Text>
           </View>
 
@@ -137,7 +227,7 @@ export default function Settings() {
         {/* 关于 */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Info color="#00ffff" size={24} />
+            <Info color="#4A90E2" size={24} />
             <Text style={styles.sectionTitle}>{t('settings.about')}</Text>
           </View>
 
@@ -164,30 +254,37 @@ export default function Settings() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: '#F5F7FA',
   },
   header: {
     padding: 20,
+    paddingTop: 40,
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#333333',
+    borderBottomColor: '#E8E8E8',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   backButton: {
-    marginBottom: 10,
+    marginBottom: 12,
   },
   backText: {
-    color: '#00ffff',
+    color: '#4A90E2',
     fontSize: 16,
+    fontWeight: '600',
   },
   title: {
-    color: '#00ffff',
-    fontSize: 24,
+    color: '#333333',
+    fontSize: 28,
     fontWeight: 'bold',
-    letterSpacing: 2,
   },
   subtitle: {
-    color: '#888888',
+    color: '#999999',
     fontSize: 12,
-    letterSpacing: 2,
+    letterSpacing: 1,
     marginTop: 4,
   },
   content: {
@@ -195,94 +292,166 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   section: {
-    marginBottom: 32,
+    marginBottom: 24,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   sectionTitle: {
-    color: '#00ffff',
+    color: '#333333',
     fontSize: 18,
     fontWeight: 'bold',
-    marginLeft: 12,
+    marginLeft: 8,
   },
   languageItem: {
-    backgroundColor: '#111111',
-    borderWidth: 1,
-    borderColor: '#333333',
-    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
     padding: 16,
     marginBottom: 8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   languageItemActive: {
-    borderColor: '#00ffff',
-    backgroundColor: 'rgba(0, 255, 255, 0.1)',
+    backgroundColor: '#E8F4FD',
+    borderWidth: 2,
+    borderColor: '#4A90E2',
   },
   languageName: {
-    color: '#ffffff',
+    color: '#333333',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   languageCode: {
-    color: '#888888',
+    color: '#999999',
     fontSize: 14,
   },
   activeIndicator: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: '#00ffff',
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#4A90E2',
+  },
+  updateCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  updateInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  updateLabel: {
+    color: '#999999',
+    fontSize: 14,
+  },
+  updateVersion: {
+    color: '#4A90E2',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  updateStatusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#F0F0F0',
+  },
+  updateStatusText: {
+    color: '#666666',
+    fontSize: 14,
+    marginLeft: 8,
+  },
+  updateButton: {
+    backgroundColor: '#4A90E2',
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+    shadowColor: '#4A90E2',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  updateButtonDisabled: {
+    backgroundColor: '#B0B0B0',
+    shadowOpacity: 0.1,
+  },
+  updateButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   cacheInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#111111',
-    borderWidth: 1,
-    borderColor: '#333333',
-    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
     padding: 16,
     marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   cacheLabel: {
-    color: '#888888',
+    color: '#999999',
     fontSize: 14,
   },
   cacheValue: {
-    color: '#00ffff',
-    fontSize: 14,
+    color: '#4A90E2',
+    fontSize: 16,
     fontWeight: 'bold',
   },
   clearButton: {
-    backgroundColor: 'rgba(255, 0, 0, 0.2)',
+    backgroundColor: '#FFFFFF',
     borderWidth: 2,
-    borderColor: '#ff0000',
-    borderRadius: 8,
-    paddingVertical: 12,
+    borderColor: '#FF6B6B',
+    borderRadius: 12,
+    paddingVertical: 14,
     alignItems: 'center',
   },
   clearButtonText: {
-    color: '#ff0000',
+    color: '#FF6B6B',
     fontSize: 16,
     fontWeight: 'bold',
   },
   aboutInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#222222',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   aboutLabel: {
-    color: '#888888',
+    color: '#999999',
     fontSize: 14,
   },
   aboutValue: {
-    color: '#ffffff',
+    color: '#333333',
     fontSize: 14,
+    fontWeight: '600',
   },
 });
