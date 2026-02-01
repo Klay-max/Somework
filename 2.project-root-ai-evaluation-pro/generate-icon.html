@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安辅导图标生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .preview-section {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .preview-box {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .preview-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        canvas {
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            height: auto;
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        input[type="color"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="color"]:focus,
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #4A90E2;
+        }
+        
+        input[type="color"] {
+            height: 50px;
+            cursor: pointer;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4A90E2, #67B8F7);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .instructions {
+            background: #e8f4fd;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 4px solid #4A90E2;
+        }
+        
+        .instructions h3 {
+            color: #4A90E2;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            border-left: 4px solid #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 安辅导图标生成器</h1>
+        <p class="subtitle">在线生成教育风格的应用图标</p>
+        
+        <div class="preview-section">
+            <div class="preview-box">
+                <div class="preview-label">应用图标 (1024x1024)</div>
+                <canvas id="iconCanvas" width="1024" height="1024"></canvas>
+            </div>
+            <div class="preview-box">
+                <div class="preview-label">网页图标 (48x48)</div>
+                <canvas id="faviconCanvas" width="48" height="48"></canvas>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>背景渐变 - 起始颜色</label>
+                <input type="color" id="colorStart" value="#4A90E2">
+            </div>
+            
+            <div class="control-group">
+                <label>背景渐变 - 结束颜色</label>
+                <input type="color" id="colorEnd" value="#67B8F7">
+            </div>
+            
+            <div class="control-group">
+                <label>AI 标记颜色</label>
+                <input type="color" id="aiColor" value="#FF9500">
+            </div>
+            
+            <div class="control-group">
+                <label>图标样式</label>
+                <select id="iconStyle">
+                    <option value="book">📚 书本 + AI</option>
+                    <option value="simple">🎓 简约教育</option>
+                    <option value="modern">✨ 现代科技</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <button class="btn-primary" onclick="generateIcons()">🎨 重新生成</button>
+            <button class="btn-primary" onclick="downloadIcon()">📥 下载 icon.png</button>
+            <button class="btn-primary" onclick="downloadAdaptiveIcon()">📥 下载 adaptive-icon.png</button>
+            <button class="btn-primary" onclick="downloadFavicon()">📥 下载 favicon.png</button>
+        </div>
+        
+        <div class="success-message" id="successMessage">
+            ✅ 图标已下载！请将文件放到项目的 assets/ 文件夹中。
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 使用说明</h3>
+            <ol>
+                <li>调整上方的颜色和样式，实时预览效果</li>
+                <li>点击"下载"按钮，下载 3 个图标文件</li>
+                <li>将下载的文件放到项目的 <code>assets/</code> 文件夹</li>
+                <li>运行 <code>eas build --platform android --profile preview2</code></li>
+                <li>等待构建完成，下载新的 APK 安装测试</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        // 初始化
+        window.onload = function() {
+            generateIcons();
+            
+            // 监听颜色变化
+            document.getElementById('colorStart').addEventListener('input', generateIcons);
+            document.getElementById('colorEnd').addEventListener('input', generateIcons);
+            document.getElementById('aiColor').addEventListener('input', generateIcons);
+            document.getElementById('iconStyle').addEventListener('change', generateIcons);
+        };
+        
+        function generateIcons() {
+            generateIcon(1024);
+            generateFavicon();
+        }
+        
+        function generateIcon(size) {
+            const canvas = document.getElementById('iconCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            const colorStart = document.getElementById('colorStart').value;
+            const colorEnd = document.getElementById('colorEnd').value;
+            const aiColor = document.getElementById('aiColor').value;
+            const style = document.getElementById('iconStyle').value;
+            
+            // 清空画布
+            ctx.clearRect(0, 0, size, size);
+            
+            // 绘制渐变背景
+            const gradient = ctx.createLinearGradient(0, 0, 0, size);
+            gradient.addColorStop(0, colorStart);
+            gradient.addColorStop(1, colorEnd);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // 根据样式绘制图标
+            if (style === 'book') {
+                drawBookIcon(ctx, size, aiColor);
+            } else if (style === 'simple') {
+                drawSimpleIcon(ctx, size, aiColor);
+            } else if (style === 'modern') {
+                drawModernIcon(ctx, size, aiColor);
+            }
+        }
+        
+        function drawBookIcon(ctx, size, aiColor) {
+            // 绘制书本
+            ctx.fillStyle = '#FFFFFF';
+            const bookWidth = size * 0.5;
+            const bookHeight = size * 0.4;
+            const bookX = (size - bookWidth) / 2;
+            const bookY = (size - bookHeight) / 2;
+            
+            // 书本主体
+            ctx.fillRect(bookX, bookY, bookWidth, bookHeight);
+            
+            // 书本阴影
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(bookX + 10, bookY + 10, bookWidth, bookHeight);
+            
+            // 书本主体（覆盖阴影）
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(bookX, bookY, bookWidth, bookHeight);
+            
+            // 书本中线
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(size / 2, bookY);
+            ctx.lineTo(size / 2, bookY + bookHeight);
+            ctx.stroke();
+            
+            // 书本页面线条
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.lineWidth = 2;
+            for (let i = 1; i <= 3; i++) {
+                const y = bookY + (bookHeight / 4) * i;
+                ctx.beginPath();
+                ctx.moveTo(bookX + 30, y);
+                ctx.lineTo(bookX + bookWidth - 30, y);
+                ctx.stroke();
+            }
+            
+            // AI 标记
+            ctx.fillStyle = aiColor;
+            ctx.font = `bold ${size * 0.15}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('AI', size * 0.75, size * 0.3);
+            
+            // AI 标记背景圆
+            ctx.fillStyle = aiColor;
+            ctx.globalAlpha = 0.2;
+            ctx.beginPath();
+            ctx.arc(size * 0.75, size * 0.3, size * 0.12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+        }
+        
+        function drawSimpleIcon(ctx, size, aiColor) {
+            // 绘制毕业帽
+            ctx.fillStyle = '#FFFFFF';
+            
+            // 帽子顶部
+            ctx.beginPath();
+            ctx.moveTo(size * 0.5, size * 0.3);
+            ctx.lineTo(size * 0.2, size * 0.45);
+            ctx.lineTo(size * 0.8, size * 0.45);
+            ctx.closePath();
+            ctx.fill();
+            
+            // 帽子底部
+            ctx.fillRect(size * 0.35, size * 0.45, size * 0.3, size * 0.15);
+            
+            // 流苏
+            ctx.strokeStyle = aiColor;
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(size * 0.5, size * 0.3);
+            ctx.lineTo(size * 0.5, size * 0.2);
+            ctx.stroke();
+            
+            ctx.fillStyle = aiColor;
+            ctx.beginPath();
+            ctx.arc(size * 0.5, size * 0.18, size * 0.03, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        function drawModernIcon(ctx, size, aiColor) {
+            // 绘制现代科技风格
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = size * 0.08;
+            ctx.lineCap = 'round';
+            
+            // 外圈
+            ctx.beginPath();
+            ctx.arc(size / 2, size / 2, size * 0.35, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // 内部装饰
+            ctx.lineWidth = size * 0.05;
+            for (let i = 0; i < 4; i++) {
+                const angle = (Math.PI / 2) * i;
+                const x1 = size / 2 + Math.cos(angle) * size * 0.2;
+                const y1 = size / 2 + Math.sin(angle) * size * 0.2;
+                const x2 = size / 2 + Math.cos(angle) * size * 0.3;
+                const y2 = size / 2 + Math.sin(angle) * size * 0.3;
+                
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            }
+            
+            // 中心 AI 标记
+            ctx.fillStyle = aiColor;
+            ctx.font = `bold ${size * 0.2}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('AI', size / 2, size / 2);
+        }
+        
+        function generateFavicon() {
+            const canvas = document.getElementById('faviconCanvas');
+            const ctx = canvas.getContext('2d');
+            const size = 48;
+            
+            const colorStart = document.getElementById('colorStart').value;
+            const colorEnd = document.getElementById('colorEnd').value;
+            const aiColor = document.getElementById('aiColor').value;
+            
+            // 清空画布
+            ctx.clearRect(0, 0, size, size);
+            
+            // 绘制渐变背景
+            const gradient = ctx.createLinearGradient(0, 0, 0, size);
+            gradient.addColorStop(0, colorStart);
+            gradient.addColorStop(1, colorEnd);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // 绘制简化的 AI 标记
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('AI', size / 2, size / 2);
+        }
+        
+        function downloadIcon() {
+            const canvas = document.getElementById('iconCanvas');
+            downloadCanvas(canvas, 'icon.png');
+        }
+        
+        function downloadAdaptiveIcon() {
+            const canvas = document.getElementById('iconCanvas');
+            downloadCanvas(canvas, 'adaptive-icon.png');
+        }
+        
+        function downloadFavicon() {
+            const canvas = document.getElementById('faviconCanvas');
+            downloadCanvas(canvas, 'favicon.png');
+        }
+        
+        function downloadCanvas(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            // 显示成功消息
+            const message = document.getElementById('successMessage');
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

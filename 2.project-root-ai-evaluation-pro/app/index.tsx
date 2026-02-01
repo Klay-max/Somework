@@ -77,9 +77,9 @@ export default function Dashboard() {
             <Text style={styles.statusText}>{t('dashboard.systemOnline')}</Text>
           </View>
 
-          {/* OTA 更新测试标记 */}
+          {/* OTA 更新测试标记 - 第二次测试 */}
           <View style={styles.otaTestBanner}>
-            <Text style={styles.otaTestText}>🎉 OTA 更新成功！版本 1.0.1</Text>
+            <Text style={styles.otaTestText}>✨ OTA 更新测试成功！版本 1.0.2 🚀</Text>
           </View>
 
           {/* 中央主控区 */}
