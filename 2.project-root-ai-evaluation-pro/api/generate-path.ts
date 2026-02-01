@@ -32,7 +32,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   
   try {
-    const { errorAnalysis, language = 'zh' }: GeneratePathRequest = req.body;
+    const { errorAnalysis, language = 'zh-CN' }: GeneratePathRequest & { language?: string } = req.body;
     
     // 验证请求参数
     if (!errorAnalysis) {
@@ -41,6 +41,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         error: 'Missing errorAnalysis parameter',
       });
     }
+    
+    // 标准化语言代码
+    const normalizedLanguage = language.startsWith('en') ? 'en' : 'zh';
     
     // 验证 errorAnalysis 结构
     if (!errorAnalysis.surfaceIssues || !Array.isArray(errorAnalysis.surfaceIssues)) {
@@ -78,9 +81,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     
     console.log('[Generate Path API] Cache miss, calling DeepSeek API');
+    console.log('[Generate Path API] Language:', normalizedLanguage);
     
-    // 调用 DeepSeek API 生成学习路径
-    const learningPath = await generateLearningPath(errorAnalysis);
+    // 调用 DeepSeek API 生成学习路径（传递语言参数）
+    const learningPath = await generateLearningPath(errorAnalysis, normalizedLanguage);
     
     // 缓存结果
     globalCache.cacheLearningPath(errorAnalysis, learningPath);

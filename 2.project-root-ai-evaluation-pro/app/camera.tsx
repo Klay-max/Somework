@@ -22,6 +22,7 @@ import { StandardAnswerManager } from '../lib/StandardAnswerManager';
 import { getTemplate } from '../lib/AnswerSheetTemplate';
 import { StorageService } from '../lib/StorageService';
 import { globalRequestQueue, RequestPriority } from '../lib/RequestQueue';
+import { t } from '../lib/i18n';
 
 export default function ScannerTerminal() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function ScannerTerminal() {
       // 请求权限
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('权限不足', '需要访问相册的权限');
+        Alert.alert(t('common.error'), t('scanner.selectFileFirst'));
         return;
       }
 
@@ -67,13 +68,13 @@ export default function ScannerTerminal() {
       }
     } catch (err) {
       console.error('选择文件失败:', err);
-      Alert.alert('错误', '选择文件失败');
+      Alert.alert(t('common.error'), t('scanner.selectFileFirst'));
     }
   };
 
   const handleStartScan = async () => {
     if (!selectedFile) {
-      Alert.alert('错误', '请先选择一个文件');
+      Alert.alert(t('common.error'), t('scanner.selectFileFirst'));
       return;
     }
 
@@ -82,7 +83,7 @@ export default function ScannerTerminal() {
     
     try {
       // 步骤 1: 图像处理
-      setProgress('正在压缩图像...');
+      setProgress(t('scanner.compressingImage'));
       setProgressPercent(10);
       
       // 根据平台处理文件
@@ -102,7 +103,7 @@ export default function ScannerTerminal() {
       console.log(`[Camera] 图像压缩完成: ${(processedImage.compressedSize! / 1024).toFixed(2)}KB`);
 
       // 步骤 2: OCR 识别（使用请求队列）
-      setProgress('正在识别答题卡...');
+      setProgress(t('scanner.recognizing'));
       setProgressPercent(25);
       
       const ocrResult = await globalRequestQueue.enqueue(
@@ -111,7 +112,7 @@ export default function ScannerTerminal() {
       );
 
       // 步骤 3: 答案提取和评分（本地处理，不调用 API）
-      setProgress('正在提取答案...');
+      setProgress(t('scanner.extracting'));
       setProgressPercent(45);
       
       const template = getTemplate('standard-50');
@@ -126,7 +127,7 @@ export default function ScannerTerminal() {
       
       const extractedAnswers = AnswerExtractor.extract(ocrResultObject, template);
       
-      setProgress('正在评分...');
+      setProgress(t('scanner.grading'));
       setProgressPercent(55);
       
       const sampleAnswerSet = StandardAnswerManager.createSampleAnswerSet();
@@ -137,7 +138,7 @@ export default function ScannerTerminal() {
       );
 
       // 步骤 4: AI 错误分析（使用请求队列）
-      setProgress('正在分析错题...');
+      setProgress(t('scanner.analyzingErrors'));
       setProgressPercent(70);
       
       const analysisResult = await globalRequestQueue.enqueue(
@@ -146,7 +147,7 @@ export default function ScannerTerminal() {
       );
 
       // 步骤 5: 生成学习路径（使用请求队列）
-      setProgress('正在生成学习路径...');
+      setProgress(t('scanner.generatingPath'));
       setProgressPercent(85);
       
       const learningPath = await globalRequestQueue.enqueue(
@@ -155,7 +156,7 @@ export default function ScannerTerminal() {
       );
 
       // 步骤 6: 准备报告数据
-      setProgress('正在生成报告...');
+      setProgress(t('scanner.generatingReport'));
       setProgressPercent(95);
       
       const reportId = `report-${Date.now()}`;
@@ -238,18 +239,18 @@ export default function ScannerTerminal() {
     } catch (err) {
       console.error('扫描失败:', err);
       
-      let errorMessage = '扫描失败，请重试';
+      let errorMessage = t('scanner.scanFailed');
       
       if (err instanceof APIError) {
         switch (err.errorCode) {
           case 'TIMEOUT':
-            errorMessage = '请求超时，请检查网络连接后重试';
+            errorMessage = t('scanner.timeout');
             break;
           case 'NETWORK_ERROR':
-            errorMessage = '网络错误，请检查网络连接';
+            errorMessage = t('scanner.networkError');
             break;
           case 'OCR_ERROR':
-            errorMessage = 'OCR 识别失败，请确保图像清晰';
+            errorMessage = t('scanner.ocrError');
             break;
           default:
             errorMessage = err.message;
@@ -259,7 +260,7 @@ export default function ScannerTerminal() {
       }
       
       setError(errorMessage);
-      Alert.alert('扫描失败', errorMessage);
+      Alert.alert(t('scanner.scanFailed'), errorMessage);
     } finally {
       setIsScanning(false);
       setProgress('');
@@ -275,10 +276,10 @@ export default function ScannerTerminal() {
           onPress={() => router.back()}
           style={styles.backButton}
         >
-          <Text style={styles.backText}>← 返回</Text>
+          <Text style={styles.backText}>← {t('common.back')}</Text>
         </TouchableOpacity>
-        <Text style={styles.title}>扫描终端</Text>
-        <Text style={styles.subtitle}>SCANNER TERMINAL</Text>
+        <Text style={styles.title}>{t('scanner.title')}</Text>
+        <Text style={styles.subtitle}>{t('scanner.titleEn')}</Text>
       </View>
 
       {/* 上传区域 */}
@@ -293,8 +294,8 @@ export default function ScannerTerminal() {
             {selectedFile 
               ? (typeof selectedFile === 'object' && 'name' in selectedFile 
                   ? selectedFile.name 
-                  : '已选择图片')
-              : '点击选择文件'}
+                  : t('scanner.fileSelected'))
+              : t('scanner.selectFile')}
           </Text>
           
           {Platform.OS === 'web' && (
@@ -329,7 +330,7 @@ export default function ScannerTerminal() {
           disabled={isScanning}
         >
           <Text style={styles.scanButtonText}>
-            {isScanning ? '扫描中...' : '开始扫描'}
+            {isScanning ? t('scanner.scanning') : t('scanner.startScan')}
           </Text>
         </TouchableOpacity>
 
@@ -337,7 +338,7 @@ export default function ScannerTerminal() {
         {isScanning && (
           <View style={styles.scanningOverlay}>
             <View style={styles.progressContainer}>
-              <Text style={styles.scanningText}>正在分析...</Text>
+              <Text style={styles.scanningText}>{t('scanner.analyzing')}</Text>
               {progress && (
                 <Text style={styles.progressText}>{progress}</Text>
               )}

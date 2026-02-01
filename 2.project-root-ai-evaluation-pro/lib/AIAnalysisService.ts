@@ -7,6 +7,7 @@
 import { apiClient, ApiError } from './ApiClient';
 import { CacheService } from './CacheService';
 import { MockApiService, isMockEnabled } from './MockApiService';
+import { getCurrentLanguage } from './i18n';
 import type { 
   AnalysisResult, 
   LearningPath, 
@@ -132,6 +133,10 @@ export class AIAnalysisService {
     }
   ): Promise<AnalysisResult> {
     try {
+      // 获取当前语言设置
+      const language = getCurrentLanguage();
+      console.log('[AIAnalysisService] 当前语言:', language);
+      
       // Mock 模式
       if (isMockEnabled()) {
         console.log('[AIAnalysisService] 使用 Mock 错误分析');
@@ -149,8 +154,8 @@ export class AIAnalysisService {
         };
       }
       
-      // 生成缓存键（基于评分结果）
-      const cacheKey = `analyze_${JSON.stringify(gradingResult).substring(0, 100)}`;
+      // 生成缓存键（基于评分结果和语言）
+      const cacheKey = `analyze_${language}_${JSON.stringify(gradingResult).substring(0, 100)}`;
       
       // 检查缓存
       const cached = await CacheService.get<AnalysisResult>(cacheKey);
@@ -161,7 +166,7 @@ export class AIAnalysisService {
       
       const response = await apiClient.post<AnalysisResult>(
         '/analyze',
-        gradingResult,
+        { ...gradingResult, language }, // 传递语言参数
         { timeout: TIMEOUT.ANALYZE }
       );
 
@@ -201,6 +206,10 @@ export class AIAnalysisService {
     analysisResult: AnalysisResult
   ): Promise<LearningPath> {
     try {
+      // 获取当前语言设置
+      const language = getCurrentLanguage();
+      console.log('[AIAnalysisService] 当前语言:', language);
+      
       // Mock 模式
       if (isMockEnabled()) {
         console.log('[AIAnalysisService] 使用 Mock 学习路径');
@@ -217,8 +226,8 @@ export class AIAnalysisService {
         };
       }
       
-      // 生成缓存键（基于分析结果）
-      const cacheKey = `path_${JSON.stringify(analysisResult).substring(0, 100)}`;
+      // 生成缓存键（基于分析结果和语言）
+      const cacheKey = `path_${language}_${JSON.stringify(analysisResult).substring(0, 100)}`;
       
       // 检查缓存
       const cached = await CacheService.get<LearningPath>(cacheKey);
@@ -229,7 +238,7 @@ export class AIAnalysisService {
       
       const response = await apiClient.post<LearningPath>(
         '/generate-path',
-        analysisResult,
+        { ...analysisResult, language }, // 传递语言参数
         { timeout: TIMEOUT.PATH }
       );
 

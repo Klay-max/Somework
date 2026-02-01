@@ -7,20 +7,26 @@
  * - 显示完整报告内容
  */
 
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Platform, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { generateMockReport } from '@/lib/mockData';
 import { ScoreCore } from '@/components/report/ScoreCore';
 // import { AbilityRadar } from '@/components/report/AbilityRadar'; // 临时注释用于测试构建
 import { StorageService } from '@/lib/StorageService';
 import type { ReportData } from '@/lib/types';
+import { t } from '@/lib/i18n';
+import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
+import { captureRef } from 'react-native-view-shot';
 
 export default function ReportPage() {
   const { id, data } = useLocalSearchParams<{ id: string; data?: string }>();
   const router = useRouter();
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isExporting, setIsExporting] = useState(false);
+  const reportRef = useRef<View>(null);
 
   // 加载报告数据
   useEffect(() => {
@@ -74,7 +80,7 @@ export default function ReportPage() {
     return (
       <View style={styles.container}>
         <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>加载中...</Text>
+          <Text style={styles.loadingText}>{t('common.loading')}</Text>
         </View>
       </View>
     );
@@ -82,13 +88,13 @@ export default function ReportPage() {
 
   // 分享功能
   const handleShare = async () => {
-    const shareText = `我的测评得分：${reportData.score.score}分，正确率：${reportData.score.accuracy}%`;
+    const shareText = `${t('report.score')}：${reportData.score.score}${t('report.accuracy')}：${reportData.score.accuracy}%`;
     
     if (Platform.OS === 'web') {
       if (navigator.share) {
         try {
           await navigator.share({
-            title: '安辅导 诊断报告',
+            title: t('report.title'),
             text: shareText,
           });
         } catch (err) {
@@ -97,8 +103,110 @@ export default function ReportPage() {
       } else {
         // 降级方案：复制到剪贴板
         await navigator.clipboard.writeText(shareText);
-        alert('链接已复制到剪贴板');
+        alert(t('report.shareSuccess'));
       }
+    } else {
+      // 移动端：导出为图片并分享
+      await exportAsImage();
+    }
+  };
+
+  // 导出为图片
+  const exportAsImage = async () => {
+    if (!reportRef.current) {
+      Alert.alert(t('common.error'), t('report.exportFailed'));
+      return;
+    }
+
+    try {
+      setIsExporting(true);
+
+      // 截取报告视图
+      const uri = await captureRef(reportRef, {
+        format: 'png',
+        quality: 0.9,
+      });
+
+      // 保存到文件系统
+      const fileName = `report_${id}_${Date.now()}.png`;
+      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+      await FileSystem.moveAsync({
+        from: uri,
+        to: fileUri,
+      });
+
+      // 分享图片
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(fileUri, {
+          mimeType: 'image/png',
+          dialogTitle: t('report.shareTitle'),
+        });
+      } else {
+        Alert.alert(t('common.success'), t('report.exportSuccess'));
+      }
+    } catch (error) {
+      console.error('导出失败:', error);
+      Alert.alert(t('common.error'), t('report.exportFailed'));
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  // 显示导出选项
+  const showExportOptions = () => {
+    if (Platform.OS === 'web') {
+      // Web 端：显示导出选项
+      const choice = confirm('选择导出格式：\n\n确定 = PDF 格式（推荐）\n取消 = 分享文本');
+      if (choice) {
+        exportAsPDF();
+      } else {
+        handleShare();
+      }
+    } else {
+      // 移动端：显示选项
+      Alert.alert(
+        t('report.export'),
+        t('report.exportOptions'),
+        [
+          {
+            text: 'PDF 格式',
+            onPress: exportAsPDF,
+          },
+          {
+            text: t('report.exportImage'),
+            onPress: exportAsImage,
+          },
+          {
+            text: t('report.shareText'),
+            onPress: handleShare,
+          },
+          {
+            text: t('common.cancel'),
+            style: 'cancel',
+          },
+        ]
+      );
+    }
+  };
+
+  // 导出为 PDF
+  const exportAsPDF = async () => {
+    try {
+      setIsExporting(true);
+      
+      const { exportReportAsPDF } = await import('../lib/PDFExportService');
+      await exportReportAsPDF(reportData);
+      
+      if (Platform.OS === 'web') {
+        // Web 端打印对话框会自动显示
+      } else {
+        Alert.alert(t('common.success'), 'PDF 导出成功');
+      }
+    } catch (error) {
+      console.error('PDF 导出失败:', error);
+      Alert.alert(t('common.error'), t('report.exportFailed'));
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -111,41 +219,44 @@ export default function ReportPage() {
             onPress={() => router.back()}
             style={styles.backButton}
           >
-            <Text style={styles.backText}>← 返回</Text>
+            <Text style={styles.backText}>← {t('common.back')}</Text>
           </TouchableOpacity>
 
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>诊断报告</Text>
+            <Text style={styles.title}>{t('report.title')}</Text>
             <Text style={styles.subtitle}>DIAGNOSTIC REPORT</Text>
           </View>
 
           <TouchableOpacity 
-            onPress={handleShare}
+            onPress={showExportOptions}
             style={styles.shareButton}
+            disabled={isExporting}
           >
-            <Text style={styles.shareText}>分享</Text>
+            <Text style={styles.shareText}>
+              {isExporting ? t('report.exporting') : t('report.export')}
+            </Text>
           </TouchableOpacity>
         </View>
 
-        {/* 报告内容 */}
-        <View style={styles.content}>
+        {/* 报告内容 - 添加 ref 用于截图 */}
+        <View ref={reportRef} collapsable={false} style={styles.content}>
           {/* 核心计分板 */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>核心得分</Text>
+            <Text style={styles.sectionTitle}>{t('report.score')}</Text>
             <ScoreCore data={reportData.score} />
           </View>
 
           {/* 五维能力雷达图 - 临时注释用于测试构建 */}
           {/* <View style={styles.section}>
-            <Text style={styles.sectionTitle}>能力分析</Text>
+            <Text style={styles.sectionTitle}>{t('report.abilityAnalysis')}</Text>
             <AbilityRadar data={reportData.ability} />
           </View> */}
           
           {/* 临时替代：显示能力数据 */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>能力分析</Text>
+            <Text style={styles.sectionTitle}>{t('report.abilityAnalysis')}</Text>
             <View style={styles.card}>
-              <Text style={styles.cardSubtitle}>五维能力评估</Text>
+              <Text style={styles.cardSubtitle}>{t('report.abilityAnalysis')}</Text>
               <View style={styles.abilityList}>
                 <View style={styles.abilityItem}>
                   <Text style={styles.abilityLabel}>听力理解</Text>

@@ -123,9 +123,50 @@ export async function callDeepSeekAPI(
 }
 
 /**
- * 构造错误分析 Prompt
+ * 构造错误分析 Prompt（支持多语言）
  */
-function buildAnalysisPrompt(gradeResult: GradeResult): string {
+function buildAnalysisPrompt(gradeResult: GradeResult, language: string = 'zh'): string {
+  if (language === 'en') {
+    return `
+Please analyze the following student's answer sheet:
+
+## Overall Performance
+- Total Score: ${gradeResult.totalScore}/${gradeResult.maxScore}
+- Accuracy: ${gradeResult.accuracy}%
+- Correct Answers: ${gradeResult.correctCount}
+- Wrong Answers: ${gradeResult.wrongCount}
+
+## Dimension Scores
+${gradeResult.dimensionScores.map(d => 
+  `- ${d.dimension}: ${d.score}/${d.maxScore} (${Math.round(d.score/d.maxScore*100)}%)`
+).join('\n')}
+
+## Wrong Answer Details
+${gradeResult.wrongAnswers.map((w, i) => `
+${i + 1}. Question ${w.questionId}
+   - Student Answer: ${w.userAnswer}
+   - Correct Answer: ${w.correctAnswer}
+   - Knowledge Points: ${w.knowledgePoints.join(', ')}
+`).join('\n')}
+
+Please return the analysis in JSON format:
+{
+  "surfaceIssues": ["Surface issue 1", "Surface issue 2", "Surface issue 3"],
+  "rootCauses": ["Root cause 1", "Root cause 2"],
+  "aiComment": "Comprehensive review (200-500 words, including strengths and improvement suggestions)",
+  "knowledgeGaps": [
+    {
+      "knowledgePoint": "Knowledge point name",
+      "difficulty": 3,
+      "mastered": false,
+      "detail": "Detailed explanation of the importance and learning suggestions"
+    }
+  ]
+}
+    `.trim();
+  }
+  
+  // 默认中文
   return `
 请分析以下学生的答题情况：
 
@@ -209,14 +250,14 @@ function validateAnalysis(data: any): ErrorAnalysis {
  * 分析错题模式
  * 
  * @param gradeResult - 评分结果
+ * @param language - 语言代码（'zh' 或 'en'）
  * @returns 错误分析
  */
-export async function analyzeErrors(gradeResult: GradeResult): Promise<ErrorAnalysis> {
-  const prompt = buildAnalysisPrompt(gradeResult);
-  const systemPrompt = `
-你是一位专业的教育分析师，擅长分析学生的答题情况并提供个性化建议。
-请严格按照 JSON 格式返回分析结果，不要包含任何额外的文本。
-  `.trim();
+export async function analyzeErrors(gradeResult: GradeResult, language: string = 'zh'): Promise<ErrorAnalysis> {
+  const prompt = buildAnalysisPrompt(gradeResult, language);
+  const systemPrompt = language === 'en' 
+    ? `You are a professional education analyst who excels at analyzing student performance and providing personalized recommendations. Please return the analysis strictly in JSON format without any additional text.`.trim()
+    : `你是一位专业的教育分析师，擅长分析学生的答题情况并提供个性化建议。请严格按照 JSON 格式返回分析结果，不要包含任何额外的文本。`.trim();
   
   try {
     const responseText = await callDeepSeekAPI(prompt, systemPrompt, 0.7, 2000);
@@ -235,9 +276,52 @@ export async function analyzeErrors(gradeResult: GradeResult): Promise<ErrorAnal
 }
 
 /**
- * 构造学习路径 Prompt
+ * 构造学习路径 Prompt（支持多语言）
  */
-function buildPathPrompt(errorAnalysis: ErrorAnalysis): string {
+function buildPathPrompt(errorAnalysis: ErrorAnalysis, language: string = 'zh'): string {
+  if (language === 'en') {
+    return `
+Based on the following error analysis, generate a personalized learning path:
+
+## Surface Issues
+${errorAnalysis.surfaceIssues.map((issue, i) => `${i + 1}. ${issue}`).join('\n')}
+
+## Root Causes
+${errorAnalysis.rootCauses.map((cause, i) => `${i + 1}. ${cause}`).join('\n')}
+
+## Knowledge Gaps
+${errorAnalysis.knowledgeGaps.map((gap, i) => `
+${i + 1}. ${gap.knowledgePoint} (Difficulty: ${gap.difficulty}/5, Mastered: ${gap.mastered ? 'Yes' : 'No'})
+   ${gap.detail}
+`).join('\n')}
+
+Requirements:
+1. Generate 3-5 learning stages
+2. Each stage contains 3-5 specific learning contents
+3. Follow the order: "Foundation Repair → Intensive Training → Sprint Improvement"
+4. Prioritize the weakest knowledge points
+5. Provide reasonable estimated duration for each stage
+
+Please return in JSON format:
+{
+  "stages": [
+    {
+      "id": "1",
+      "title": "Stage Title",
+      "content": [
+        "Specific learning content 1",
+        "Specific learning content 2",
+        "Specific learning content 3"
+      ],
+      "videoLinks": [],
+      "duration": "2 weeks"
+    }
+  ]
+}
+    `.trim();
+  }
+  
+  // 默认中文
   return `
 基于以下错误分析，生成个性化学习路径：
 
@@ -321,14 +405,14 @@ function validateLearningPath(data: any): LearningPath {
  * 生成学习路径
  * 
  * @param errorAnalysis - 错误分析结果
+ * @param language - 语言代码（'zh' 或 'en'）
  * @returns 学习路径
  */
-export async function generateLearningPath(errorAnalysis: ErrorAnalysis): Promise<LearningPath> {
-  const prompt = buildPathPrompt(errorAnalysis);
-  const systemPrompt = `
-你是一位专业的学习规划师，擅长根据学生的薄弱环节制定个性化学习路径。
-请严格按照 JSON 格式返回学习路径，不要包含任何额外的文本。
-  `.trim();
+export async function generateLearningPath(errorAnalysis: ErrorAnalysis, language: string = 'zh'): Promise<LearningPath> {
+  const prompt = buildPathPrompt(errorAnalysis, language);
+  const systemPrompt = language === 'en'
+    ? `You are a professional learning planner who excels at creating personalized learning paths based on students' weaknesses. Please return the learning path strictly in JSON format without any additional text.`.trim()
+    : `你是一位专业的学习规划师，擅长根据学生的薄弱环节制定个性化学习路径。请严格按照 JSON 格式返回学习路径，不要包含任何额外的文本。`.trim();
   
   try {
     const responseText = await callDeepSeekAPI(prompt, systemPrompt, 0.7, 2000);

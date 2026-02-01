@@ -1,0 +1,58 @@
+# EAS Build 忽略文件
+# 减少上传大小，加快构建速度
+
+# 开发文件
+*.md
+*.log
+.git
+.github
+
+# 测试文件
+**/__tests__
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# 文档和指南
+ANDROID_*.md
+DEPLOYMENT_*.md
+TEST_*.md
+TASK_*.md
+PROJECT_*.md
+CHECKPOINT_*.md
+NETWORK_*.md
+MOCK_*.md
+COMPREHENSIVE_*.md
+SESSION_*.md
+QUICKSTART_*.md
+VERCEL_*.md
+GITHUB_*.md
+*.指南.md
+*.说明.md
+*.完成.md
+*.状态.md
+
+# 测试脚本
+test-*.js
+test-*.html
+diagnose-*.js
+quick-test.js
+
+# 构建产物
+dist/
+.expo/
+.vercel/
+
+# 旧的 APK
+*.apk
+
+# 本地服务器
+local-api-server.js
+
+# 批处理脚本
+*.bat
+*.sh
+
+# 环境文件示例
+.env.example

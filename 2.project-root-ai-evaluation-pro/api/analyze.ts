@@ -32,7 +32,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   
   try {
-    const { gradeResult, language = 'zh' }: AnalyzeRequest = req.body;
+    const { gradeResult, language = 'zh-CN' }: AnalyzeRequest & { language?: string } = req.body;
     
     // 验证请求参数
     if (!gradeResult) {
@@ -41,6 +41,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         error: 'Missing gradeResult parameter',
       });
     }
+    
+    // 标准化语言代码
+    const normalizedLanguage = language.startsWith('en') ? 'en' : 'zh';
     
     // 验证 gradeResult 结构
     if (!gradeResult.wrongAnswers || !Array.isArray(gradeResult.wrongAnswers)) {
@@ -71,9 +74,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     
     console.log('[Analyze API] Cache miss, calling DeepSeek API');
+    console.log('[Analyze API] Language:', normalizedLanguage);
     
-    // 调用 DeepSeek API 进行错误分析
-    const analysis = await analyzeErrors(gradeResult);
+    // 调用 DeepSeek API 进行错误分析（传递语言参数）
+    const analysis = await analyzeErrors(gradeResult, normalizedLanguage);
     
     // 缓存结果
     globalCache.cacheAnalysisResult(gradeResult, analysis);

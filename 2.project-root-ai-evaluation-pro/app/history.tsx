@@ -13,6 +13,7 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'rea
 import { useRouter } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { StorageService, type StoredReport } from '../lib/StorageService';
+import { t } from '../lib/i18n';
 
 export default function HistoryPage() {
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function HistoryPage() {
       setStatistics(stats);
     } catch (error) {
       console.error('加载历史记录失败:', error);
-      Alert.alert('错误', '加载历史记录失败');
+      Alert.alert(t('common.error'), t('history.noHistory'));
     } finally {
       setIsLoading(false);
     }
@@ -62,19 +63,19 @@ export default function HistoryPage() {
   // 删除报告
   const handleDeleteReport = (id: string) => {
     Alert.alert(
-      '确认删除',
-      '确定要删除这条报告吗？',
+      t('common.delete'),
+      t('history.confirmClearMessage'),
       [
-        { text: '取消', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: '删除',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: async () => {
             try {
               await StorageService.deleteReport(id);
               await loadHistory(); // 重新加载
             } catch (error) {
-              Alert.alert('错误', '删除失败');
+              Alert.alert(t('common.error'), t('common.error'));
             }
           },
         },
@@ -85,19 +86,19 @@ export default function HistoryPage() {
   // 清空所有记录
   const handleClearAll = () => {
     Alert.alert(
-      '确认清空',
-      '确定要清空所有历史记录吗？此操作不可恢复。',
+      t('history.confirmClear'),
+      t('history.confirmClearMessage'),
       [
-        { text: '取消', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: '清空',
+          text: t('history.clearAll'),
           style: 'destructive',
           onPress: async () => {
             try {
               await StorageService.clearAllReports();
               await loadHistory();
             } catch (error) {
-              Alert.alert('错误', '清空失败');
+              Alert.alert(t('common.error'), t('common.error'));
             }
           },
         },
@@ -131,12 +132,12 @@ export default function HistoryPage() {
           onPress={() => router.back()}
           style={styles.backButton}
         >
-          <Text style={styles.backText}>← 返回</Text>
+          <Text style={styles.backText}>← {t('common.back')}</Text>
         </TouchableOpacity>
 
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>历史记录</Text>
-          <Text style={styles.subtitle}>HISTORY</Text>
+          <Text style={styles.title}>{t('history.title')}</Text>
+          <Text style={styles.subtitle}>{t('history.titleEn')}</Text>
         </View>
 
         {reports.length > 0 && (
@@ -144,7 +145,7 @@ export default function HistoryPage() {
             onPress={handleClearAll}
             style={styles.clearButton}
           >
-            <Text style={styles.clearText}>清空</Text>
+            <Text style={styles.clearText}>{t('history.clearAll')}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -157,19 +158,19 @@ export default function HistoryPage() {
               <Text style={styles.statsTitle}>统计概览</Text>
               <View style={styles.statsGrid}>
                 <View style={styles.statItem}>
-                  <Text style={styles.statValue}>{statistics.totalReports}</Text>
+                  <Text style={styles.statValue}>{statistics.totalReports || 0}</Text>
                   <Text style={styles.statLabel}>总测评次数</Text>
                 </View>
                 <View style={styles.statItem}>
-                  <Text style={styles.statValue}>{statistics.averageScore.toFixed(0)}</Text>
+                  <Text style={styles.statValue}>{statistics.averageScore ? statistics.averageScore.toFixed(0) : '0'}</Text>
                   <Text style={styles.statLabel}>平均分</Text>
                 </View>
                 <View style={styles.statItem}>
-                  <Text style={styles.statValue}>{statistics.highestScore}</Text>
+                  <Text style={styles.statValue}>{statistics.highestScore || 0}</Text>
                   <Text style={styles.statLabel}>最高分</Text>
                 </View>
                 <View style={styles.statItem}>
-                  <Text style={styles.statValue}>{statistics.averageAccuracy.toFixed(1)}%</Text>
+                  <Text style={styles.statValue}>{statistics.averageAccuracy ? statistics.averageAccuracy.toFixed(1) : '0'}%</Text>
                   <Text style={styles.statLabel}>平均正确率</Text>
                 </View>
               </View>
@@ -179,13 +180,13 @@ export default function HistoryPage() {
           {/* 历史记录列表 */}
           {isLoading ? (
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>加载中...</Text>
+              <Text style={styles.emptyText}>{t('common.loading')}</Text>
             </View>
           ) : reports.length === 0 ? (
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyIcon}>📋</Text>
-              <Text style={styles.emptyText}>暂无历史记录</Text>
-              <Text style={styles.emptyHint}>完成一次扫描后，记录将显示在这里</Text>
+              <Text style={styles.emptyText}>{t('history.noHistory')}</Text>
+              <Text style={styles.emptyHint}>{t('history.noHistoryMessage')}</Text>
             </View>
           ) : (
             <View style={styles.listContainer}>
@@ -205,13 +206,13 @@ export default function HistoryPage() {
                       <Text style={styles.reportDate}>{formatDate(report.timestamp)}</Text>
                       <View style={styles.reportStats}>
                         <View style={styles.reportStatItem}>
-                          <Text style={styles.reportStatLabel}>得分</Text>
+                          <Text style={styles.reportStatLabel}>{t('report.score')}</Text>
                           <Text style={styles.reportStatValue}>{report.score}</Text>
                         </View>
                         <View style={styles.reportStatDivider} />
                         <View style={styles.reportStatItem}>
-                          <Text style={styles.reportStatLabel}>正确率</Text>
-                          <Text style={styles.reportStatValue}>{report.accuracy.toFixed(1)}%</Text>
+                          <Text style={styles.reportStatLabel}>{t('report.accuracy')}</Text>
+                          <Text style={styles.reportStatValue}>{report.accuracy ? report.accuracy.toFixed(1) : '0'}%</Text>
                         </View>
                       </View>
                     </View>
@@ -222,13 +223,13 @@ export default function HistoryPage() {
                         style={styles.viewButton}
                         onPress={() => handleViewReport(report)}
                       >
-                        <Text style={styles.viewButtonText}>查看</Text>
+                        <Text style={styles.viewButtonText}>{t('common.edit')}</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.deleteButton}
                         onPress={() => handleDeleteReport(report.id)}
                       >
-                        <Text style={styles.deleteButtonText}>删除</Text>
+                        <Text style={styles.deleteButtonText}>{t('common.delete')}</Text>
                       </TouchableOpacity>
                     </View>
                   </TouchableOpacity>

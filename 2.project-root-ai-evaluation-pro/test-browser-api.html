@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API 连接测试</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #00ff00;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #00ffff;
+            text-align: center;
+        }
+        .test-section {
+            background: #111;
+            border: 1px solid #00ff00;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            border-radius: 3px;
+        }
+        button:hover {
+            background: #00ffff;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 3px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .success {
+            color: #00ff00;
+        }
+        .error {
+            color: #ff0000;
+        }
+        .info {
+            color: #00ffff;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 API 连接测试工具</h1>
+    
+    <div class="test-section">
+        <h3>测试 1: OCR 端点</h3>
+        <button onclick="testOCR()">测试 OCR API</button>
+        <div id="ocr-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>测试 2: 分析端点</h3>
+        <button onclick="testAnalyze()">测试分析 API</button>
+        <div id="analyze-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>测试 3: 学习路径端点</h3>
+        <button onclick="testPath()">测试学习路径 API</button>
+        <div id="path-result" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001/api';
+
+        function log(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info';
+            element.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+        }
+
+        function clearLog(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+
+        async function testOCR() {
+            clearLog('ocr-result');
+            log('ocr-result', '开始测试 OCR API...', 'info');
+            
+            try {
+                log('ocr-result', `请求地址: ${API_BASE}/ocr`, 'info');
+                
+                const response = await fetch(`${API_BASE}/ocr`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        imageBase64: 'data:image/jpeg;base64,/9j/4AAQSkZJRg=='
+                    })
+                });
+
+                log('ocr-result', `响应状态: ${response.status} ${response.statusText}`, 'info');
+                
+                const data = await response.json();
+                log('ocr-result', '响应数据:', 'info');
+                log('ocr-result', JSON.stringify(data, null, 2), 'success');
+                
+                if (data.success) {
+                    log('ocr-result', '✓ OCR API 测试成功！', 'success');
+                } else {
+                    log('ocr-result', '✗ OCR API 返回失败', 'error');
+                }
+            } catch (error) {
+                log('ocr-result', `✗ 错误: ${error.message}`, 'error');
+                log('ocr-result', '请确保本地 API 服务器正在运行 (node local-api-server.js)', 'error');
+            }
+        }
+
+        async function testAnalyze() {
+            clearLog('analyze-result');
+            log('analyze-result', '开始测试分析 API...', 'info');
+            
+            try {
+                log('analyze-result', `请求地址: ${API_BASE}/analyze`, 'info');
+                
+                const response = await fetch(`${API_BASE}/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        wrongAnswers: [
+                            { questionNumber: 1, userAnswer: 'A', correctAnswer: 'B' },
+                            { questionNumber: 5, userAnswer: 'C', correctAnswer: 'D' }
+                        ]
+                    })
+                });
+
+                log('analyze-result', `响应状态: ${response.status} ${response.statusText}`, 'info');
+                
+                const data = await response.json();
+                log('analyze-result', '响应数据:', 'info');
+                log('analyze-result', JSON.stringify(data, null, 2), 'success');
+                
+                if (data.surfaceIssues) {
+                    log('analyze-result', '✓ 分析 API 测试成功！', 'success');
+                } else {
+                    log('analyze-result', '✗ 分析 API 返回格式错误', 'error');
+                }
+            } catch (error) {
+                log('analyze-result', `✗ 错误: ${error.message}`, 'error');
+                log('analyze-result', '请确保本地 API 服务器正在运行 (node local-api-server.js)', 'error');
+            }
+        }
+
+        async function testPath() {
+            clearLog('path-result');
+            log('path-result', '开始测试学习路径 API...', 'info');
+            
+            try {
+                log('path-result', `请求地址: ${API_BASE}/generate-path`, 'info');
+                
+                const response = await fetch(`${API_BASE}/generate-path`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        rootCauses: ['词汇量不足', '语法基础薄弱']
+                    })
+                });
+
+                log('path-result', `响应状态: ${response.status} ${response.statusText}`, 'info');
+                
+                const data = await response.json();
+                log('path-result', '响应数据:', 'info');
+                log('path-result', JSON.stringify(data, null, 2), 'success');
+                
+                if (data.stages) {
+                    log('path-result', '✓ 学习路径 API 测试成功！', 'success');
+                } else {
+                    log('path-result', '✗ 学习路径 API 返回格式错误', 'error');
+                }
+            } catch (error) {
+                log('path-result', `✗ 错误: ${error.message}`, 'error');
+                log('path-result', '请确保本地 API 服务器正在运行 (node local-api-server.js)', 'error');
+            }
+        }
+
+        // 页面加载时显示提示
+        window.onload = function() {
+            console.log('API 测试工具已加载');
+            console.log('API 基础地址:', API_BASE);
+        };
+    </script>
+</body>
+</html>
