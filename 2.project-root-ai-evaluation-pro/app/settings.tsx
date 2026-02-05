@@ -76,27 +76,16 @@ export default function Settings() {
   };
 
   const handleCheckUpdate = async () => {
-    // 检查是否支持 OTA 更新
-    if (!Updates.isEnabled) {
-      const debugInfo = `
-环境信息：
-- 开发模式: ${__DEV__ ? '是' : '否'}
-- Updates.isEnabled: ${Updates.isEnabled}
-- Platform: ${Platform.OS}
-
-OTA 更新仅在生产构建中可用。
-请使用 EAS Build 构建的 APK 测试更新功能。
-      `.trim();
-      
-      Alert.alert('OTA 更新不可用', debugInfo);
-      return;
-    }
-
     setIsCheckingUpdate(true);
     setUpdateInfo('正在检查更新...');
 
     try {
       console.log('开始检查更新...');
+      console.log('环境信息:', {
+        isDev: __DEV__,
+        isEnabled: Updates.isEnabled,
+        platform: Platform.OS,
+      });
       
       // 检查是否有可用更新
       const update = await Updates.checkForUpdateAsync();
@@ -143,7 +132,16 @@ OTA 更新仅在生产构建中可用。
       setIsCheckingUpdate(false);
       
       const errorMessage = error instanceof Error ? error.message : '未知错误';
-      Alert.alert('错误', `检查更新失败：${errorMessage}\n\n请确保：\n1. 使用 EAS Build 构建的 APK\n2. 网络连接正常\n3. 不在开发模式下运行`);
+      
+      // 如果是因为不支持 OTA 更新
+      if (!Updates.isEnabled) {
+        Alert.alert(
+          'OTA 更新不可用',
+          `当前环境不支持 OTA 更新\n\n环境信息：\n- 开发模式: ${__DEV__ ? '是' : '否'}\n- Updates.isEnabled: ${Updates.isEnabled}\n- Platform: ${Platform.OS}\n\nOTA 更新仅在生产构建中可用。\n请使用 EAS Build 构建的 APK 测试更新功能。`
+        );
+      } else {
+        Alert.alert('错误', `检查更新失败：${errorMessage}\n\n请确保网络连接正常`);
+      }
     }
   };
 

@@ -81,6 +81,11 @@ export default function Dashboard() {
             <Text style={styles.statusText}>{t('dashboard.systemOnline')}</Text>
           </View>
 
+          {/* 版本标记 - 用于测试 OTA 更新 */}
+          <View style={styles.versionBanner}>
+            <Text style={styles.versionText}>🎉 版本 1.0.4 - 新功能已上线！</Text>
+          </View>
+
           {/* 快捷统计卡片 */}
           <View style={styles.quickStatsContainer}>
             <View style={styles.quickStatCard}>
@@ -321,5 +326,21 @@ const styles = StyleSheet.create({
   quickStatLabel: {
     color: '#999999',
     fontSize: 12,
+  },
+  versionBanner: {
+    backgroundColor: '#E8F5E9',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginHorizontal: 32,
+    marginTop: 8,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#81C784',
+  },
+  versionText: {
+    color: '#2E7D32',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
