@@ -12,15 +12,28 @@ export default function RootLayout() {
     async function checkForUpdates() {
       // 只在生产环境和非开发模式下检查更新
       if (__DEV__ || !Updates.isEnabled) {
+        console.log('OTA 更新已禁用:', {
+          isDev: __DEV__,
+          isEnabled: Updates.isEnabled,
+        });
         return;
       }
 
       try {
+        console.log('自动检查更新...');
         const update = await Updates.checkForUpdateAsync();
         
+        console.log('更新检查结果:', {
+          isAvailable: update.isAvailable,
+          manifest: update.manifest,
+        });
+        
         if (update.isAvailable) {
+          console.log('发现新版本，开始下载...');
+          
           // 后台下载更新
-          await Updates.fetchUpdateAsync();
+          const result = await Updates.fetchUpdateAsync();
+          console.log('更新下载完成:', result);
           
           // 提示用户重启应用
           Alert.alert(
@@ -39,6 +52,8 @@ export default function RootLayout() {
               },
             ]
           );
+        } else {
+          console.log('当前已是最新版本');
         }
       } catch (error) {
         // 静默失败，不影响用户体验

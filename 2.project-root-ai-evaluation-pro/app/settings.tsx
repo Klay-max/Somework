@@ -78,7 +78,17 @@ export default function Settings() {
   const handleCheckUpdate = async () => {
     // 检查是否支持 OTA 更新
     if (!Updates.isEnabled) {
-      Alert.alert('提示', '当前环境不支持 OTA 更新\n（开发模式下不可用）');
+      const debugInfo = `
+环境信息：
+- 开发模式: ${__DEV__ ? '是' : '否'}
+- Updates.isEnabled: ${Updates.isEnabled}
+- Platform: ${Platform.OS}
+
+OTA 更新仅在生产构建中可用。
+请使用 EAS Build 构建的 APK 测试更新功能。
+      `.trim();
+      
+      Alert.alert('OTA 更新不可用', debugInfo);
       return;
     }
 
@@ -86,14 +96,20 @@ export default function Settings() {
     setUpdateInfo('正在检查更新...');
 
     try {
+      console.log('开始检查更新...');
+      
       // 检查是否有可用更新
       const update = await Updates.checkForUpdateAsync();
       
+      console.log('更新检查结果:', update);
+      
       if (update.isAvailable) {
         setUpdateInfo('发现新版本，正在下载...');
+        console.log('发现新版本，开始下载...');
         
         // 下载更新
-        await Updates.fetchUpdateAsync();
+        const result = await Updates.fetchUpdateAsync();
+        console.log('下载完成:', result);
         
         setUpdateInfo('');
         setIsCheckingUpdate(false);
@@ -116,6 +132,7 @@ export default function Settings() {
           ]
         );
       } else {
+        console.log('当前已是最新版本');
         setUpdateInfo('');
         setIsCheckingUpdate(false);
         Alert.alert('提示', '当前已是最新版本');
@@ -124,7 +141,9 @@ export default function Settings() {
       console.error('检查更新失败:', error);
       setUpdateInfo('');
       setIsCheckingUpdate(false);
-      Alert.alert('错误', '检查更新失败，请稍后重试');
+      
+      const errorMessage = error instanceof Error ? error.message : '未知错误';
+      Alert.alert('错误', `检查更新失败：${errorMessage}\n\n请确保：\n1. 使用 EAS Build 构建的 APK\n2. 网络连接正常\n3. 不在开发模式下运行`);
     }
   };
 
