@@ -19,6 +19,8 @@ export default function Dashboard() {
   const [statistics, setStatistics] = useState({
     totalReports: 0,
     averageAccuracy: 0,
+    averageScore: 0,
+    highestScore: 0,
   });
 
   // 加载统计信息
@@ -32,6 +34,8 @@ export default function Dashboard() {
       setStatistics({
         totalReports: stats.totalReports,
         averageAccuracy: stats.averageAccuracy,
+        averageScore: stats.averageScore,
+        highestScore: stats.highestScore,
       });
     } catch (error) {
       console.error('加载统计信息失败:', error);
@@ -77,9 +81,27 @@ export default function Dashboard() {
             <Text style={styles.statusText}>{t('dashboard.systemOnline')}</Text>
           </View>
 
-          {/* OTA 更新测试标记 - 第二次测试 */}
-          <View style={styles.otaTestBanner}>
-            <Text style={styles.otaTestText}>✨ OTA 更新测试成功！版本 1.0.2 🚀</Text>
+          {/* 快捷统计卡片 */}
+          <View style={styles.quickStatsContainer}>
+            <View style={styles.quickStatCard}>
+              <Text style={styles.quickStatIcon}>📊</Text>
+              <Text style={styles.quickStatValue}>{statistics.totalReports}</Text>
+              <Text style={styles.quickStatLabel}>总测评</Text>
+            </View>
+            <View style={styles.quickStatCard}>
+              <Text style={styles.quickStatIcon}>⭐</Text>
+              <Text style={styles.quickStatValue}>
+                {statistics.averageScore > 0 ? statistics.averageScore.toFixed(0) : '--'}
+              </Text>
+              <Text style={styles.quickStatLabel}>平均分</Text>
+            </View>
+            <View style={styles.quickStatCard}>
+              <Text style={styles.quickStatIcon}>🏆</Text>
+              <Text style={styles.quickStatValue}>
+                {statistics.highestScore > 0 ? statistics.highestScore : '--'}
+              </Text>
+              <Text style={styles.quickStatLabel}>最高分</Text>
+            </View>
           </View>
 
           {/* 中央主控区 */}
@@ -267,20 +289,37 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
   },
-  otaTestBanner: {
-    backgroundColor: '#FFF7E6',
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    marginHorizontal: 32,
+  quickStatsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: 32,
     marginTop: 16,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#FFD591',
+    gap: 12,
   },
-  otaTestText: {
-    color: '#FF9500',
-    fontSize: 18,
+  quickStatCard: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  quickStatIcon: {
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  quickStatValue: {
+    color: '#4A90E2',
+    fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  quickStatLabel: {
+    color: '#999999',
+    fontSize: 12,
   },
 });

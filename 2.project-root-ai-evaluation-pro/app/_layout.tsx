@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import * as Updates from 'expo-updates';
 import { Alert, Platform } from 'react-native';
+import { ThemeProvider } from '../lib/ThemeContext';
 
 export default function RootLayout() {
   // 检查应用更新
@@ -52,7 +53,7 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <>
+    <ThemeProvider>
       {/* 状态栏设置为深色（适配浅色背景） */}
       <StatusBar style="dark" />
       
@@ -65,6 +66,6 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: '#F5F7FA' },
         }}
       />
-    </>
+    </ThemeProvider>
   );
 }

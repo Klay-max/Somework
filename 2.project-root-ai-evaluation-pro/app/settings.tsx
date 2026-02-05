@@ -8,15 +8,17 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator, Switch } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Globe, Trash2, Info, RefreshCw } from 'lucide-react-native';
+import { Globe, Trash2, Info, RefreshCw, Moon } from 'lucide-react-native';
 import { getCurrentLanguage, setLanguage, getSupportedLanguages, t } from '../lib/i18n';
 import { CacheService } from '../lib/CacheService';
 import * as Updates from 'expo-updates';
+import { useTheme } from '../lib/ThemeContext';
 
 export default function Settings() {
   const router = useRouter();
+  const { theme, toggleTheme, isDark } = useTheme();
   const [currentLang, setCurrentLang] = useState(getCurrentLanguage());
   const [cacheSize, setCacheSize] = useState(0);
   const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
@@ -143,6 +145,29 @@ export default function Settings() {
       </View>
 
       <ScrollView style={styles.content}>
+        {/* 深色模式 */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Moon color="#4A90E2" size={24} />
+            <Text style={styles.sectionTitle}>深色模式</Text>
+          </View>
+
+          <View style={styles.themeCard}>
+            <View style={styles.themeInfo}>
+              <Text style={styles.themeLabel}>启用深色模式</Text>
+              <Text style={styles.themeDescription}>
+                {isDark ? '当前使用深色主题' : '当前使用浅色主题'}
+              </Text>
+            </View>
+            <Switch
+              value={isDark}
+              onValueChange={toggleTheme}
+              trackColor={{ false: '#D1D1D6', true: '#4A90E2' }}
+              thumbColor={isDark ? '#FFFFFF' : '#F4F3F4'}
+            />
+          </View>
+        </View>
+
         {/* 语言设置 */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -338,6 +363,32 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: '#4A90E2',
+  },
+  themeCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  themeInfo: {
+    flex: 1,
+  },
+  themeLabel: {
+    color: '#333333',
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  themeDescription: {
+    color: '#999999',
+    fontSize: 13,
   },
   updateCard: {
     backgroundColor: '#FFFFFF',

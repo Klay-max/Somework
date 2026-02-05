@@ -9,7 +9,7 @@
  * - 显示统计信息
  */
 
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { StorageService, type StoredReport } from '../lib/StorageService';
@@ -18,6 +18,8 @@ import { t } from '../lib/i18n';
 export default function HistoryPage() {
   const router = useRouter();
   const [reports, setReports] = useState<StoredReport[]>([]);
+  const [filteredReports, setFilteredReports] = useState<StoredReport[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [statistics, setStatistics] = useState({
     totalReports: 0,
     averageScore: 0,
@@ -32,6 +34,25 @@ export default function HistoryPage() {
     loadHistory();
   }, []);
 
+  // 搜索过滤
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredReports(reports);
+    } else {
+      const query = searchQuery.toLowerCase();
+      const filtered = reports.filter(report => {
+        const dateStr = formatDate(report.timestamp).toLowerCase();
+        const scoreStr = report.score.toString();
+        const accuracyStr = report.accuracy.toFixed(1);
+        
+        return dateStr.includes(query) || 
+               scoreStr.includes(query) || 
+               accuracyStr.includes(query);
+      });
+      setFilteredReports(filtered);
+    }
+  }, [searchQuery, reports]);
+
   const loadHistory = async () => {
     try {
       setIsLoading(true);
@@ -41,6 +62,7 @@ export default function HistoryPage() {
       ]);
       
       setReports(reportsData);
+      setFilteredReports(reportsData);
       setStatistics(stats);
     } catch (error) {
       console.error('加载历史记录失败:', error);
@@ -150,6 +172,27 @@ export default function HistoryPage() {
         )}
       </View>
 
+      {/* 搜索栏 */}
+      {reports.length > 0 && (
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="搜索日期、分数或正确率..."
+            placeholderTextColor="#666666"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity
+              style={styles.clearSearchButton}
+              onPress={() => setSearchQuery('')}
+            >
+              <Text style={styles.clearSearchText}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
+
       <ScrollView style={styles.scrollView}>
         <View style={styles.content}>
           {/* 统计信息 */}
@@ -182,6 +225,12 @@ export default function HistoryPage() {
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>{t('common.loading')}</Text>
             </View>
+          ) : filteredReports.length === 0 && searchQuery.length > 0 ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyIcon}>🔍</Text>
+              <Text style={styles.emptyText}>未找到匹配的记录</Text>
+              <Text style={styles.emptyHint}>试试其他搜索关键词</Text>
+            </View>
           ) : reports.length === 0 ? (
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyIcon}>📋</Text>
@@ -190,7 +239,7 @@ export default function HistoryPage() {
             </View>
           ) : (
             <View style={styles.listContainer}>
-              {reports.map((report, index) => (
+              {filteredReports.map((report, index) => (
                 <View key={report.id} style={styles.reportCard}>
                   <TouchableOpacity
                     style={styles.reportContent}
@@ -290,6 +339,39 @@ const styles = StyleSheet.create({
   clearText: {
     color: '#ff6666',
     fontSize: 14,
+  },
+  searchContainer: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: '#000000',
+    borderBottomWidth: 1,
+    borderBottomColor: '#333333',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  searchInput: {
+    flex: 1,
+    backgroundColor: '#111111',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 255, 0.3)',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    color: '#FFFFFF',
+    fontSize: 16,
+  },
+  clearSearchButton: {
+    marginLeft: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  clearSearchText: {
+    color: '#888888',
+    fontSize: 20,
   },
   scrollView: {
     flex: 1,
