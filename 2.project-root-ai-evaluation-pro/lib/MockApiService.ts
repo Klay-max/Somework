@@ -12,7 +12,7 @@ import type { ReportData } from './types';
  * Mock 配置
  */
 export const MOCK_CONFIG = {
-  enabled: false, // 是否启用 Mock 模式 - 默认使用真实 API
+  enabled: true, // 是否启用 Mock 模式 - 由于 OCR 网络问题，暂时启用 Mock
   delay: {
     ocr: 1500,      // OCR 识别延迟（毫秒）
     analysis: 2000,  // 错误分析延迟
