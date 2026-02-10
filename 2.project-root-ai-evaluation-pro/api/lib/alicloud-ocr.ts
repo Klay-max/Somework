@@ -146,7 +146,8 @@ function parseOCRResponse(data: any): OCRResult {
 export async function callAliCloudOCR(imageBase64: string): Promise<OCRResult> {
   const accessKeyId = process.env.ALICLOUD_ACCESS_KEY_ID;
   const accessKeySecret = process.env.ALICLOUD_ACCESS_KEY_SECRET;
-  const endpoint = process.env.ALICLOUD_OCR_ENDPOINT || 'https://ocr-api.cn-shanghai.aliyuncs.com';
+  // 使用杭州端点（网络诊断显示可用）
+  const endpoint = process.env.ALICLOUD_OCR_ENDPOINT || 'https://ocr-api.cn-hangzhou.aliyuncs.com';
   
   // 验证环境变量
   if (!accessKeyId || !accessKeySecret) {
