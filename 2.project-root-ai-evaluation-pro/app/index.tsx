@@ -104,7 +104,7 @@ export default function Dashboard() {
 
           {/* 版本标记 - 用于测试 OTA 更新 */}
           <View style={styles.versionBanner}>
-            <Text style={styles.versionText}>🎉 版本 1.0.5 - 学习统计功能上线！</Text>
+            <Text style={styles.versionText}>🎉 版本 1.0.6 - UI 优化完成！</Text>
           </View>
 
           {/* 每日提示语 */}
