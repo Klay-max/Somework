@@ -13,9 +13,11 @@ import { useState, useEffect } from 'react';
 import { Settings as SettingsIcon } from 'lucide-react-native';
 import { StorageService } from '../lib/StorageService';
 import { t } from '../lib/i18n';
+import { useTheme } from '../lib/ThemeContext';
 
 export default function Dashboard() {
   const router = useRouter();
+  const { isDark } = useTheme();
   const [statistics, setStatistics] = useState({
     totalReports: 0,
     averageAccuracy: 0,
@@ -84,13 +86,13 @@ export default function Dashboard() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isDark && styles.containerDark]}>
       {/* 设置按钮 */}
       <TouchableOpacity 
-        style={styles.settingsButton}
+        style={[styles.settingsButton, isDark && styles.settingsButtonDark]}
         onPress={handleSettings}
       >
-        <SettingsIcon color="#4A90E2" size={24} />
+        <SettingsIcon color={isDark ? "#64B5F6" : "#4A90E2"} size={24} />
       </TouchableOpacity>
 
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
@@ -99,29 +101,29 @@ export default function Dashboard() {
           {/* 顶部状态栏 */}
           <View style={styles.statusBar}>
             <View style={styles.statusIndicator} />
-            <Text style={styles.statusText}>{t('dashboard.systemOnline')}</Text>
+            <Text style={[styles.statusText, isDark && styles.statusTextDark]}>{t('dashboard.systemOnline')}</Text>
           </View>
 
           {/* 版本标记 - 用于测试 OTA 更新 */}
-          <View style={styles.versionBanner}>
-            <Text style={styles.versionText}>🎉 版本 1.0.6 - UI 优化完成！</Text>
+          <View style={[styles.versionBanner, isDark && styles.versionBannerDark]}>
+            <Text style={[styles.versionText, isDark && styles.versionTextDark]}>🎉 版本 1.0.6 - UI 优化完成！</Text>
           </View>
 
           {/* 每日提示语 */}
-          <View style={styles.dailyTipCard}>
-            <Text style={styles.dailyTipText}>{dailyTip}</Text>
+          <View style={[styles.dailyTipCard, isDark && styles.dailyTipCardDark]}>
+            <Text style={[styles.dailyTipText, isDark && styles.dailyTipTextDark]}>{dailyTip}</Text>
           </View>
 
           {/* 今日学习统计 */}
-          <View style={styles.todayStatsCard}>
-            <Text style={styles.todayStatsTitle}>📖 今日学习</Text>
+          <View style={[styles.todayStatsCard, isDark && styles.todayStatsCardDark]}>
+            <Text style={[styles.todayStatsTitle, isDark && styles.todayStatsTitleDark]}>📖 今日学习</Text>
             <View style={styles.studyTimeContainer}>
-              <Text style={styles.studyTimeValue}>{todayStudyTime}</Text>
-              <Text style={styles.studyTimeUnit}>分钟</Text>
+              <Text style={[styles.studyTimeValue, isDark && styles.studyTimeValueDark]}>{todayStudyTime}</Text>
+              <Text style={[styles.studyTimeUnit, isDark && styles.studyTimeUnitDark]}>分钟</Text>
             </View>
             {/* 学习进度条 */}
             <View style={styles.progressBarContainer}>
-              <View style={styles.progressBarBg}>
+              <View style={[styles.progressBarBg, isDark && styles.progressBarBgDark]}>
                 <View 
                   style={[
                     styles.progressBarFill, 
@@ -129,7 +131,7 @@ export default function Dashboard() {
                   ]} 
                 />
               </View>
-              <Text style={styles.progressText}>
+              <Text style={[styles.progressText, isDark && styles.progressTextDark]}>
                 目标: 120分钟 ({Math.min(Math.floor((todayStudyTime / 120) * 100), 100)}%)
               </Text>
             </View>
@@ -137,24 +139,24 @@ export default function Dashboard() {
 
           {/* 快捷统计卡片 */}
           <View style={styles.quickStatsContainer}>
-            <View style={styles.quickStatCard}>
+            <View style={[styles.quickStatCard, isDark && styles.quickStatCardDark]}>
               <Text style={styles.quickStatIcon}>📊</Text>
-              <Text style={styles.quickStatValue}>{statistics.totalReports}</Text>
-              <Text style={styles.quickStatLabel}>总测评</Text>
+              <Text style={[styles.quickStatValue, isDark && styles.quickStatValueDark]}>{statistics.totalReports}</Text>
+              <Text style={[styles.quickStatLabel, isDark && styles.quickStatLabelDark]}>总测评</Text>
             </View>
-            <View style={styles.quickStatCard}>
+            <View style={[styles.quickStatCard, isDark && styles.quickStatCardDark]}>
               <Text style={styles.quickStatIcon}>⭐</Text>
-              <Text style={styles.quickStatValue}>
+              <Text style={[styles.quickStatValue, isDark && styles.quickStatValueDark]}>
                 {statistics.averageScore > 0 ? statistics.averageScore.toFixed(0) : '--'}
               </Text>
-              <Text style={styles.quickStatLabel}>平均分</Text>
+              <Text style={[styles.quickStatLabel, isDark && styles.quickStatLabelDark]}>平均分</Text>
             </View>
-            <View style={styles.quickStatCard}>
+            <View style={[styles.quickStatCard, isDark && styles.quickStatCardDark]}>
               <Text style={styles.quickStatIcon}>🏆</Text>
-              <Text style={styles.quickStatValue}>
+              <Text style={[styles.quickStatValue, isDark && styles.quickStatValueDark]}>
                 {statistics.highestScore > 0 ? statistics.highestScore : '--'}
               </Text>
-              <Text style={styles.quickStatLabel}>最高分</Text>
+              <Text style={[styles.quickStatLabel, isDark && styles.quickStatLabelDark]}>最高分</Text>
             </View>
           </View>
 
@@ -212,6 +214,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F7FA',
   },
+  containerDark: {
+    backgroundColor: '#121212',
+  },
   settingsButton: {
     position: 'absolute',
     top: 20,
@@ -225,6 +230,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,
+  },
+  settingsButtonDark: {
+    backgroundColor: '#1E1E1E',
   },
   scrollView: {
     flex: 1,
@@ -256,6 +264,9 @@ const styles = StyleSheet.create({
     color: '#4A90E2',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  statusTextDark: {
+    color: '#64B5F6',
   },
   mainControlContainer: {
     marginVertical: 20,
@@ -390,6 +401,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
+  versionBannerDark: {
+    backgroundColor: '#1B5E20',
+    borderColor: '#388E3C',
+  },
+  versionTextDark: {
+    color: '#81C784',
+  },
   dailyTipCard: {
     backgroundColor: '#FFF3E0',
     borderRadius: 12,
@@ -401,10 +419,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#FFB74D',
   },
+  dailyTipCardDark: {
+    backgroundColor: '#3E2723',
+    borderColor: '#FF8A65',
+  },
   dailyTipText: {
     color: '#E65100',
     fontSize: 16,
     fontWeight: '600',
+  },
+  dailyTipTextDark: {
+    color: '#FFAB91',
   },
   todayStatsCard: {
     backgroundColor: '#FFFFFF',
@@ -418,12 +443,18 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 3,
   },
+  todayStatsCardDark: {
+    backgroundColor: '#1E1E1E',
+  },
   todayStatsTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333333',
     marginBottom: 16,
     textAlign: 'center',
+  },
+  todayStatsTitleDark: {
+    color: '#E0E0E0',
   },
   studyTimeContainer: {
     flexDirection: 'row',
@@ -436,10 +467,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#4A90E2',
   },
+  studyTimeValueDark: {
+    color: '#64B5F6',
+  },
   studyTimeUnit: {
     fontSize: 18,
     color: '#999999',
     marginLeft: 6,
+  },
+  studyTimeUnitDark: {
+    color: '#B0B0B0',
   },
   progressBarContainer: {
     marginTop: 8,
@@ -449,6 +486,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#E0E0E0',
     borderRadius: 6,
     overflow: 'hidden',
+  },
+  progressBarBgDark: {
+    backgroundColor: '#424242',
   },
   progressBarFill: {
     height: '100%',
@@ -460,5 +500,17 @@ const styles = StyleSheet.create({
     color: '#999999',
     marginTop: 8,
     textAlign: 'center',
+  },
+  progressTextDark: {
+    color: '#B0B0B0',
+  },
+  quickStatCardDark: {
+    backgroundColor: '#1E1E1E',
+  },
+  quickStatValueDark: {
+    color: '#64B5F6',
+  },
+  quickStatLabelDark: {
+    color: '#B0B0B0',
   },
 });
