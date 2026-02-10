@@ -23,9 +23,30 @@ export default function Dashboard() {
     highestScore: 0,
   });
 
+  // 今日学习时长（模拟数据）
+  const [todayStudyTime, setTodayStudyTime] = useState(0);
+  
+  // 每日提示语
+  const dailyTips = [
+    '💪 坚持就是胜利！',
+    '🌟 每一次练习都是进步！',
+    '📚 知识改变命运！',
+    '🎯 今天的努力，明天的成功！',
+    '✨ 相信自己，你能做到！',
+    '🚀 学习使我快乐！',
+    '🌈 加油，你是最棒的！',
+  ];
+  
+  const [dailyTip, setDailyTip] = useState('');
+
   // 加载统计信息
   useEffect(() => {
     loadStatistics();
+    // 根据日期选择每日提示语
+    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+    setDailyTip(dailyTips[dayOfYear % dailyTips.length]);
+    // 模拟今日学习时长（实际应该从存储中读取）
+    setTodayStudyTime(Math.floor(Math.random() * 120) + 30);
   }, []);
 
   const loadStatistics = async () => {
@@ -83,7 +104,35 @@ export default function Dashboard() {
 
           {/* 版本标记 - 用于测试 OTA 更新 */}
           <View style={styles.versionBanner}>
-            <Text style={styles.versionText}>🎉 版本 1.0.4 - 新功能已上线！</Text>
+            <Text style={styles.versionText}>🎉 版本 1.0.5 - 学习统计功能上线！</Text>
+          </View>
+
+          {/* 每日提示语 */}
+          <View style={styles.dailyTipCard}>
+            <Text style={styles.dailyTipText}>{dailyTip}</Text>
+          </View>
+
+          {/* 今日学习统计 */}
+          <View style={styles.todayStatsCard}>
+            <Text style={styles.todayStatsTitle}>📖 今日学习</Text>
+            <View style={styles.studyTimeContainer}>
+              <Text style={styles.studyTimeValue}>{todayStudyTime}</Text>
+              <Text style={styles.studyTimeUnit}>分钟</Text>
+            </View>
+            {/* 学习进度条 */}
+            <View style={styles.progressBarContainer}>
+              <View style={styles.progressBarBg}>
+                <View 
+                  style={[
+                    styles.progressBarFill, 
+                    { width: `${Math.min((todayStudyTime / 120) * 100, 100)}%` }
+                  ]} 
+                />
+              </View>
+              <Text style={styles.progressText}>
+                目标: 120分钟 ({Math.min(Math.floor((todayStudyTime / 120) * 100), 100)}%)
+              </Text>
+            </View>
           </View>
 
           {/* 快捷统计卡片 */}
@@ -342,5 +391,75 @@ const styles = StyleSheet.create({
     color: '#2E7D32',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  dailyTipCard: {
+    backgroundColor: '#FFF3E0',
+    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    marginHorizontal: 32,
+    marginTop: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#FFB74D',
+  },
+  dailyTipText: {
+    color: '#E65100',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  todayStatsCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 20,
+    marginHorizontal: 32,
+    marginTop: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  todayStatsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 12,
+  },
+  studyTimeContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  studyTimeValue: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#4A90E2',
+  },
+  studyTimeUnit: {
+    fontSize: 20,
+    color: '#999999',
+    marginLeft: 8,
+  },
+  progressBarContainer: {
+    marginTop: 8,
+  },
+  progressBarBg: {
+    height: 12,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 6,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    backgroundColor: '#4CAF50',
+    borderRadius: 6,
+  },
+  progressText: {
+    fontSize: 12,
+    color: '#999999',
+    marginTop: 8,
+    textAlign: 'center',
   },
 });
