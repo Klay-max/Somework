@@ -258,12 +258,12 @@ function generatePDFHTML(report: ReportData): string {
           <div class="score-value">${score.accuracy}%</div>
         </div>
         <div class="score-item">
-          <div class="score-label">正确题数</div>
-          <div class="score-value">${score.correct}/${score.total}</div>
+          <div class="score-label">全国平均</div>
+          <div class="score-value">${score.national}</div>
         </div>
         <div class="score-item">
-          <div class="score-label">错误题数</div>
-          <div class="score-value">${score.wrong}</div>
+          <div class="score-label">本省平均</div>
+          <div class="score-value">${score.province}</div>
         </div>
       </div>
     </div>
@@ -330,16 +330,16 @@ function generatePDFHTML(report: ReportData): string {
     
     <!-- 知识矩阵 -->
     <div class="section">
-      <h2 class="section-title">知识薄弱点</h2>
+      <h2 class="section-title">知识点掌握情况</h2>
       <div class="list">
-        ${knowledge.weakPoints.map(point => `<div class="list-item">${point}</div>`).join('')}
+        ${knowledge.map(point => `<div class="list-item">${point.name} - ${point.mastered ? '✓ 已掌握' : '✗ 待加强'} (难度: ${'★'.repeat(point.difficulty)})</div>`).join('')}
       </div>
     </div>
     
     <!-- 升级路径 -->
     <div class="section">
       <h2 class="section-title">个性化学习路径</h2>
-      ${path.map((stage, index) => `
+      ${path.map((stage) => `
         <div class="path-stage">
           <div class="stage-header">
             <span class="stage-title">${stage.title}</span>
@@ -390,8 +390,8 @@ export async function exportReportAsPDF(report: ReportData): Promise<void> {
   if (Platform.OS === 'web') {
     await exportPDFWeb(report);
   } else {
-    // 移动端：使用 react-native-html-to-pdf
-    throw new Error('移动端 PDF 导出功能开发中');
+    // 移动端：暂不支持 PDF 导出，返回友好提示
+    throw new Error('PDF 导出功能仅支持 Web 端，移动端请使用"导出为图片"功能');
   }
 }
 

@@ -194,7 +194,7 @@ export default function ReportPage() {
     try {
       setIsExporting(true);
       
-      const { exportReportAsPDF } = await import('../lib/PDFExportService');
+      const { exportReportAsPDF } = await import('@/lib/PDFExportService');
       await exportReportAsPDF(reportData);
       
       if (Platform.OS === 'web') {
@@ -202,9 +202,11 @@ export default function ReportPage() {
       } else {
         Alert.alert(t('common.success'), 'PDF 导出成功');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('PDF 导出失败:', error);
-      Alert.alert(t('common.error'), t('report.exportFailed'));
+      // 显示友好的错误提示，而不是让应用闪退
+      const errorMessage = error?.message || t('report.exportFailed');
+      Alert.alert(t('common.error'), errorMessage);
     } finally {
       setIsExporting(false);
     }
@@ -390,8 +392,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333',
+    borderBottomWidth: 2,
+    borderBottomColor: 'rgba(0, 255, 255, 0.3)',
+    backgroundColor: '#0a0a0a',
   },
   backButton: {
     padding: 8,
@@ -400,6 +403,7 @@ const styles = StyleSheet.create({
   backText: {
     color: '#00ffff',
     fontSize: 16,
+    fontWeight: '600',
   },
   titleContainer: {
     alignItems: 'center',
@@ -407,201 +411,223 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#00ffff',
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
-    letterSpacing: 2,
+    letterSpacing: 3,
+    textShadowColor: 'rgba(0, 255, 255, 0.5)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
   },
   subtitle: {
     color: '#888888',
-    fontSize: 12,
+    fontSize: 11,
     marginTop: 4,
+    letterSpacing: 2,
   },
   shareButton: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderWidth: 1,
-    borderColor: 'rgba(0, 255, 255, 0.5)',
-    borderRadius: 4,
+    borderColor: 'rgba(0, 255, 255, 0.6)',
+    borderRadius: 6,
     minWidth: 80,
+    backgroundColor: 'rgba(0, 255, 255, 0.05)',
   },
   shareText: {
     color: '#00ffff',
     fontSize: 14,
+    fontWeight: '600',
   },
   content: {
-    padding: 24,
+    padding: 20,
     maxWidth: 1200,
     alignSelf: 'center',
     width: '100%',
   },
   section: {
-    marginBottom: 32,
+    marginBottom: 28,
   },
   sectionTitle: {
     color: '#00ffff',
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 16,
     letterSpacing: 1,
+    paddingLeft: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: '#00ffff',
   },
   card: {
-    backgroundColor: '#111111',
+    backgroundColor: '#0f0f0f',
     borderWidth: 1,
-    borderColor: 'rgba(0, 255, 255, 0.3)',
-    borderRadius: 12,
-    padding: 24,
+    borderColor: 'rgba(0, 255, 255, 0.25)',
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#00ffff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
   },
   cardSubtitle: {
     color: '#00ffff',
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: 'bold',
-    marginBottom: 12,
+    marginBottom: 14,
+    letterSpacing: 0.5,
   },
   tagContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 10,
   },
   tag: {
-    backgroundColor: 'rgba(0, 255, 255, 0.1)',
+    backgroundColor: 'rgba(0, 255, 255, 0.12)',
     borderWidth: 1,
-    borderColor: '#00ffff',
+    borderColor: 'rgba(0, 255, 255, 0.4)',
     borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginRight: 12,
-    marginBottom: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    marginRight: 8,
+    marginBottom: 8,
   },
   tagText: {
     color: '#00ffff',
-    fontSize: 14,
+    fontSize: 13,
+    fontWeight: '500',
   },
   alertBox: {
-    backgroundColor: 'rgba(255, 0, 0, 0.1)',
-    borderWidth: 1,
-    borderColor: '#ff0000',
+    backgroundColor: 'rgba(255, 0, 0, 0.08)',
+    borderLeftWidth: 3,
+    borderLeftColor: '#ff3333',
     borderRadius: 8,
-    padding: 16,
-    marginBottom: 12,
+    padding: 14,
+    marginBottom: 10,
   },
   alertText: {
     color: '#ff6666',
-    fontSize: 15,
+    fontSize: 14,
     lineHeight: 22,
   },
   commentText: {
-    color: '#cccccc',
-    fontSize: 15,
+    color: '#d0d0d0',
+    fontSize: 14,
     lineHeight: 24,
   },
   knowledgeItem: {
     borderBottomWidth: 1,
-    borderBottomColor: '#333333',
-    paddingVertical: 16,
+    borderBottomColor: '#222222',
+    paddingVertical: 14,
   },
   knowledgeHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 10,
   },
   statusDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     marginRight: 12,
   },
   knowledgeName: {
     color: '#ffffff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: '600',
     flex: 1,
   },
   knowledgeMeta: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingLeft: 22,
   },
   knowledgeDifficulty: {
-    color: '#888888',
-    fontSize: 15,
+    color: '#999999',
+    fontSize: 14,
   },
   knowledgeStatus: {
-    fontSize: 15,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: '600',
   },
   pathStage: {
-    borderLeftWidth: 4,
+    borderLeftWidth: 3,
     borderLeftColor: '#00ffff',
-    paddingLeft: 24,
-    marginBottom: 24,
+    paddingLeft: 20,
+    marginBottom: 20,
   },
   stageHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 10,
   },
   stageNumber: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#00ffff',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: 14,
   },
   stageNumberText: {
     color: '#000000',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   stageTitle: {
     color: '#00ffff',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     flex: 1,
   },
   stageContent: {
-    color: '#cccccc',
-    fontSize: 15,
-    marginBottom: 12,
-    lineHeight: 24,
+    color: '#d0d0d0',
+    fontSize: 14,
+    marginBottom: 10,
+    lineHeight: 22,
+    paddingLeft: 50,
   },
   stageDuration: {
-    color: '#888888',
-    fontSize: 14,
+    color: '#999999',
+    fontSize: 13,
+    paddingLeft: 50,
   },
   // 临时能力列表样式
   abilityList: {
-    gap: 16,
+    gap: 12,
   },
   abilityItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#333333',
+    borderBottomColor: '#222222',
   },
   abilityLabel: {
-    color: '#cccccc',
-    fontSize: 16,
+    color: '#d0d0d0',
+    fontSize: 15,
+    fontWeight: '500',
   },
   abilityValue: {
     color: '#00ffff',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   footer: {
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 32,
+    marginTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#222222',
   },
   footerText: {
     color: '#666666',
-    fontSize: 13,
+    fontSize: 12,
   },
   footerCopyright: {
     color: '#444444',
-    fontSize: 11,
-    marginTop: 8,
+    fontSize: 10,
+    marginTop: 6,
   },
 });
